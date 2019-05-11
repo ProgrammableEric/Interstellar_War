@@ -1,5 +1,5 @@
 /**
- * 大敌机类，体积大，抗打击能力强
+ * the largest star with large quality and high resistance
  */
 public class Jupiter extends NewStar {
 
