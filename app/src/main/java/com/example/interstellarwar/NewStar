@@ -1,7 +1,37 @@
 /**
- *
+ * Stars that can move straightly
  */
-public class EnemyPlane extends AutoSprite {
+public class NewStar extends Star {
 
+    private int power; // the power of star that can be attacked
+    private int value; // the rewarded credit that attaching a star
 
+    public NewStar(Bitmap bitmap){
+        super(bitmap);
+    }
+
+    public void setPower(int power){
+        this.power = power;
+    }
+
+    public int getPower(){
+        return power;
+    }
+
+    public void setValue(int value){
+        this.value = value;
+    }
+
+    public int getValue(){
+        return value;
+    }
+
+    @Override
+    protected void afterDeploy() {
+        super.afterDraw(canvas, paint, gameView);
+    }
+
+    // the star will be detroyed after nuclear
+    public void explode(GameView gameView){
+    }
 }
