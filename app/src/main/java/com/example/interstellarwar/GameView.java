@@ -102,7 +102,7 @@ public class GameView extends View {
     }
 
     private int setTouch(MotionEvent event){
-        return touchAction;
+        return 0;
     }
 
     private boolean checkSingleClick(){
