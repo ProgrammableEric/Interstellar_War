@@ -10,16 +10,16 @@ public class Planet {
     private float x; //x-coordinate
     private float y; //y-coordinate
     private float Offset; //offset for collide
-    private Bitmap bitmap;
+    private Bitmap bm;
     private boolean destroyed; //if planet is destroyed
     private int times; //the deploy times
 
-    public Planet(Bitmap bitmap){
-        this.bitmap = bitmap;
+    public Planet(Bitmap bm){
+        this.bm = bm;
     }
 
     public Bitmap getBitmap() {
-        return bitmap;
+        return bm;
     }
 
     // Set planet to be visible
