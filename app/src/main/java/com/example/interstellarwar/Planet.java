@@ -1,3 +1,6 @@
+package com.example.interstellarwar;
+
+import android.graphics.Bitmap;
 
 /**
  * the basic class for creating rival planets
