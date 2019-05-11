@@ -10,8 +10,8 @@ public class Star extends Planet {
 
     private float speed; // the pixel number of each movement, go down for positive
 
-    public Star(Bitmap bitmap){
-        super(bitmap);
+    public Star(Bitmap bm){
+        super(bm);
     }
 
     public void setSpeed(float speed){
