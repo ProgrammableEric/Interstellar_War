@@ -2,9 +2,10 @@ package com.example.interstellarwar;
 
 import android.graphics.Bitmap;
 
-public class NuclearCredit extends Credit {
+public class Laser extends Star {
 
-    public NuclearCredit(Bitmap bm){
+    public Laser(Bitmap bm){
         super(bm);
+        setSpeed(-10);
     }
 }
