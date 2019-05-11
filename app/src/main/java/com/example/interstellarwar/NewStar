@@ -1,0 +1,7 @@
+/**
+ *
+ */
+public class EnemyPlane extends AutoSprite {
+
+
+}
