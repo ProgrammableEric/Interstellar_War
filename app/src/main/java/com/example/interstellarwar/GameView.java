@@ -153,26 +153,26 @@ public class GameView extends View {
     }
 
     public int getState(){
-        return state;
+        return 0;
     }
 
     public float getResult(){
-        return result;
+        return 0f;
     }
 
     public Bitmap getYellowBulletBitmap(){
-        return bmps.get(2);
+        return null;
     }
 
     public Bitmap getBlueBulletBitmap(){
-        return bmps.get(3);
+        return null;
     }
 
     public Bitmap getExplosionBitmap(){
-        return bmps.get(1);
+        return null;
     }
 
-    public List<RivalFlights> getAliveEnemyPlanes(){
+    public List<NewStar> getAliveEnemyPlanes(){
         return null;
     }
 

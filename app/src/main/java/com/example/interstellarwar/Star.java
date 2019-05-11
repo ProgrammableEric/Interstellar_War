@@ -1,3 +1,6 @@
+package com.example.interstellarwar;
+
+import android.graphics.Bitmap;
 
 /**
  * Planets that can be move straightly

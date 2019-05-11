@@ -4,12 +4,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-public class RivalFlights {
+public class NewStar extends Star {
     private int resistance = 1;//how the planet is resistant
     private int grade = 0;// how many grades can get after destroying one planet
 
-    public RivalFlights(Bitmap bm) {
-        //super(bm);
+    public NewStar(Bitmap bm) {
+        super(bm);
     }
 
     public void setResistance(int res) {
