@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameView extends View {
@@ -20,18 +21,29 @@ public class GameView extends View {
     private TextPaint textPaint;
     private SpaceShip spaceShip = null;
 
-    //private List<Sprite> sprites = new ArrayList<Sprite>();
-    //private List<Sprite> spritesNeedAdded = new ArrayList<Sprite>();
+    // initial the planets and to add planets
+    private List<src.main.java.com.example.interstellarwar.Planet> planets = new ArrayList<src.main.java.com.example.interstellarwar.Planet>();
+    private List<src.main.java.com.example.interstellarwar.Planet> toAddPlanets = new ArrayList<src.main.java.com.example.interstellarwar.Planet>();
 
-    //    private List<Bitmap> bitmaps = new ArrayList<Bitmap>();
-    //    private float density = getResources().getDisplayMetrics().density;//屏幕密度
-    //    public static final int STATUS_GAME_STARTED = 1;//游戏开始
-    //    public static final int STATUS_GAME_PAUSED = 2;//游戏暂停
-    //    public static final int STATUS_GAME_OVER = 3;//游戏结束
-    //    public static final int STATUS_GAME_DESTROYED = 4;//游戏销毁
-    //    private int status = STATUS_GAME_DESTROYED;//初始为销毁状态
-    //    private long frame = 0;//总共绘制的帧数
-    //    private long score = 0;//总得分
+    //0:spaceship
+    //1:bombing
+    //2:laser
+    //4:mercury
+    //5:mars
+    //6:jupiter
+    //7:nuclearCredit
+    //9:pause1
+    //10:pause2
+    //11:nuclear
+    private List<Bitmap> bitmaps = new ArrayList<Bitmap>();
+    private float density = getResources().getDisplayMetrics().density;
+    public static final int STATUS_GAME_STARTED = 1;
+    public static final int STATUS_GAME_PAUSED = 2;
+    public static final int STATUS_GAME_OVER = 3;
+    public static final int STATUS_GAME_DESTROYED = 4;
+    private int status = STATUS_GAME_DESTROYED;
+    private long frame = 0;
+    private long score = 0;
     private float fontSize = 12;
     private float fontSize2 = 20;
     private float borderSize = 2;
@@ -56,14 +68,17 @@ public class GameView extends View {
 
     public GameView(Context context) {
         super(context);
-        beginView();
+        beginView(null,0);
     }
 
     public GameView(Context context, AttributeSet attrs) {
-
+        super(context, attrs);
+        beginView(attrs, 0);
     }
 
     public GameView(Context context, AttributeSet attrs, int default) {
+        super(context, attrs, default);
+        beginView(attrs, default);
 
     }
 
@@ -76,10 +91,10 @@ public class GameView extends View {
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.ANTI_ALIAS_FLAG);
         textPaint.setColor(0xff000000);
         fontSize = textPaint.getTextSize();
-//        fontSize *= density;
-//        fontSize2 *= density;
-//        textPaint.setTextSize(fontSize);
-//        borderSize *= density;
+        fontSize *= density;
+        fontSize2 *= density;
+        textPaint.setTextSize(fontSize);
+        borderSize *= density;
 
     }
 
@@ -196,7 +211,7 @@ public class GameView extends View {
 
 
     ////////////////
-    public void addPlanet(Planet planet){
+    public void addPlanet(src.main.java.com.example.interstellarwar.Planet planet){
 
     }
 
