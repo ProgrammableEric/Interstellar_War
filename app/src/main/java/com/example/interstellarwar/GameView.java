@@ -3,6 +3,7 @@ package com.example.interstellarwar;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -99,23 +100,35 @@ public class GameView extends View {
     }
 
     public void startSeting(int[] bmIds){
-
+        //destroy();
+        for(int bitmapId : bitmapIds){
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), bitmapId);
+            bitmaps.add(bitmap);
+        }
+        spaceShip = new SpaceShip(bitmaps.get(0));
+        status = STATUS_GAME_STARTED;
+        postInvalidate();
     }
 
-    private void setAfterViewsReady(){
-
-    }
+//    private void setAfterViewsReady(){
+//
+//
+//    }
 
     private void restart(){
-
+        //destroyNotRecyleBitmaps();
+        spaceShip = new SpaceShip(bitmaps.get(0));
+        status = STATUS_GAME_STARTED;
+        postInvalidate();
     }
 
     public void pause(){
-
+        status = STATUS_GAME_PAUSED;
     }
 
     private void setGameState(){
-
+        status = STATUS_GAME_STARTED;
+        postInvalidate();
     }
 
     private long caculateScores(){
@@ -126,7 +139,19 @@ public class GameView extends View {
     // Draw all the game views
 
     protected void onDraw(Canvas canvas){
+        if(isSingleClick()){
+            onSingleClick(touchX, touchY);
+        }
 
+        super.onDraw(canvas);
+
+        if(status == STATUS_GAME_STARTED){
+            drawGameStarted(canvas);
+        }else if(status == STATUS_GAME_PAUSED){
+            drawGamePaused(canvas);
+        }else if(status == STATUS_GAME_OVER){
+            drawGameOver(canvas);
+        }
     }
 
     private void drawGaming(Canvas canvas){
