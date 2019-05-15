@@ -155,6 +155,60 @@ public class GameView extends View {
     }
 
     private void drawGaming(Canvas canvas){
+        drawScoreAndBombs(canvas);
+
+        //第一次绘制时，将战斗机移到Canvas最下方，在水平方向的中心
+        if(frame == 0){
+            float centerX = canvas.getWidth() / 2;
+            float centerY = canvas.getHeight() - combatAircraft.getHeight() / 2;
+            combatAircraft.centerTo(centerX, centerY);
+        }
+
+        //将spritesNeedAdded添加到sprites中
+        if(spritesNeedAdded.size() > 0){
+            sprites.addAll(spritesNeedAdded);
+            spritesNeedAdded.clear();
+        }
+
+        //检查战斗机跑到子弹前面的情况
+        destroyBulletsFrontOfCombatAircraft();
+
+        //在绘制之前先移除掉已经被destroyed的Sprite
+        removeDestroyedSprites();
+
+        //每隔30帧随机添加Sprite
+        if(frame % 30 == 0){
+            createRandomSprites(canvas.getWidth());
+        }
+        frame++;
+
+        //遍历sprites，绘制敌机、子弹、奖励、爆炸效果
+        Iterator<Sprite> iterator = sprites.iterator();
+        while (iterator.hasNext()){
+            Sprite s = iterator.next();
+
+            if(!s.isDestroyed()){
+                //在Sprite的draw方法内有可能会调用destroy方法
+                s.draw(canvas, paint, this);
+            }
+
+            //我们此处要判断Sprite在执行了draw方法后是否被destroy掉了
+            if(s.isDestroyed()){
+                //如果Sprite被销毁了，那么从Sprites中将其移除
+                iterator.remove();
+            }
+        }
+
+        if(combatAircraft != null){
+            //最后绘制战斗机
+            combatAircraft.draw(canvas, paint, this);
+            if(combatAircraft.isDestroyed()){
+                //如果战斗机被击中销毁了，那么游戏结束
+                status = STATUS_GAME_OVER;
+            }
+            //通过调用postInvalidate()方法使得View持续渲染，实现动态效果
+            postInvalidate();
+        }
 
     }
 
