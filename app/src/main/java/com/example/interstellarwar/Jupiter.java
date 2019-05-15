@@ -1,8 +1,6 @@
 package com.example.interstellarwar;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 
 /**
  * the largest star with large quality and high resistance

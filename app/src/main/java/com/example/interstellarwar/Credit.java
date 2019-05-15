@@ -1,4 +1,4 @@
-package com.example.interstellarwar;
+package src.main.java.com.example.interstellarwar;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

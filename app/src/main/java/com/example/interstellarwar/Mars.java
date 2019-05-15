@@ -1,8 +1,6 @@
 package com.example.interstellarwar;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 
 /**
  * the medium star with medium quality and medium resistance

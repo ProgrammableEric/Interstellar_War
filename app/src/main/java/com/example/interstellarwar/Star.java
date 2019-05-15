@@ -1,6 +1,9 @@
 package com.example.interstellarwar;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
 
 /**
  * Planets that can be move straightly
@@ -8,7 +11,7 @@ import android.graphics.Bitmap;
 
 public class Star extends Planet {
 
-    private float speed; // the pixel number of each movement, go down for positive
+    private float speed = 2; // the pixel number of each movement, go down for positive
 
     public Star(Bitmap bm){
         super(bm);
@@ -23,9 +26,22 @@ public class Star extends Planet {
     }
 
     @Override
-    protected void beforeDeploy() {
+
+    //// move speed along the y axis
+    protected void beforeDeploy(Canvas canvas, Paint paint, GameView gameView) {
+        if(!isDestroyed()){
+            move(0, speed * gameView.getDensity());
+        }
     }
 
-    protected void finishDeploy(){
+    //check if planet exceeds the range of Canvas, if yes, then destroy planet
+    protected void finishDeploy(Canvas canvas, Paint paint, GameView gameView){
+        if(!isDestroyed()){
+            RectF canvasRecF = new RectF(0, 0, canvas.getWidth(), canvas.getHeight());
+            RectF spriteRecF = getRectF();
+            if(!RectF.intersects(canvasRecF, spriteRecF)){
+                destroy();
+            }
+        }
     }
 }
