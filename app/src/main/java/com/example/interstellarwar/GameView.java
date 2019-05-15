@@ -213,6 +213,22 @@ public class GameView extends View {
     }
 
     private void drawPausing(Canvas canvas){
+        drawScoreAndBombs(canvas);
+
+        //调用Sprite的onDraw方法，而非draw方法，这样就能渲染静态的Sprite，而不让Sprite改变位置
+        for(Sprite s : sprites){
+            s.onDraw(canvas, paint, this);
+        }
+        if(combatAircraft != null){
+            combatAircraft.onDraw(canvas, paint, this);
+        }
+
+        //绘制Dialog，显示得分
+        drawScoreDialog(canvas, "继续");
+
+        if(lastSingleClickTime > 0){
+            postInvalidate();
+        }
 
     }
 
