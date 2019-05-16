@@ -44,7 +44,8 @@ public class GameView extends View {
 //    public static final int STATUS_GAME_PAUSED = 2;
 //    public static final int STATUS_GAME_OVER = 3;
 //    public static final int STATUS_GAME_DESTROYED = 4;
-    private int status = 4;//destroyed
+    // start=1  pause=2  over=3  destroyed=4
+    private int status = 4;
     private long frame = 0;
     private long score = 0;
     private float fontSize = 12;
@@ -57,17 +58,15 @@ public class GameView extends View {
     //    private static final int TOUCH_SINGLE_CLICK = 2;//单击
     //    private static final int TOUCH_DOUBLE_CLICK = 3;//双击
     //    //一次单击事件由DOWN和UP两个事件合成，假设从down到up间隔小于200毫秒，我们就认为发生了一次单击事件
+    //duration between up and down action
     private static final int singleDuration = 200;
-    //    //一次双击事件由两个点击事件合成，两个单击事件之间小于300毫秒，我们就认为发生了一次双击事件
+    // double click means short duration between two single clicks
     private static final int doubleDuration = 300;
     private long lastSingleClickTime = -1;
     private long tDownTime = -1;
     private long tUpTime = -1;
     private float tX = -1;
     private float tY = -1;
-
-
-    private long score = 0;//total grades for the reuslt
 
     public GameView(Context context) {
         super(context);
@@ -101,7 +100,7 @@ public class GameView extends View {
 //    }
 
     public void startSeting(int[] bmIds){
-        //destroy();
+        remove();
         for(int Id : bmIds){
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), Id);
             bitmaps.add(bitmap);
@@ -113,7 +112,17 @@ public class GameView extends View {
 
 
     private void restart(){
-        removeBitmaps();
+        status = 4;
+        frame = 0;
+        score = 0;
+        if(spaceShip != null){
+            spaceShip.destroy();
+        }
+        spaceShip = null;
+        for(Planet p : planets){
+            p.destroy();
+        }
+        planets.clear();
         spaceShip = new SpaceShip(bitmaps.get(0));
         status = 1;
         postInvalidate();
@@ -163,7 +172,17 @@ public class GameView extends View {
                 }
             }else if(status == 3){
                 if(continueRect.contains((int)tX, (int)tY)){
-                    removeBitmaps();
+                    status = 4;
+                    frame = 0;
+                    score = 0;
+                    if(spaceShip != null){
+                        spaceShip.destroy();
+                    }
+                    spaceShip = null;
+                    for(Planet p : planets){
+                        p.destroy();
+                    }
+                    planets.clear();
                     spaceShip = new SpaceShip(bitmaps.get(0));
                     status = 1;
                     postInvalidate();
@@ -213,9 +232,9 @@ public class GameView extends View {
         frame++;
 
         //draw all the items
-        Iterator<Planet> iterator = planets.iterator();
-        while (iterator.hasNext()){
-            Planet p = iterator.next();
+        Iterator<Planet> iterator2 = planets.iterator();
+        while (iterator2.hasNext()){
+            Planet p = iterator2.next();
             if(!p.isDestroyed()){
                 p.Deploy(canvas, paint, this);
             }
@@ -257,10 +276,10 @@ public class GameView extends View {
     private void drawScoreResults(Canvas canvas, String operation){
         int cW = canvas.getWidth();
         int cH = canvas.getHeight();
-        float originalFontSize = textPaint.getTextSize();
-        Paint.Align originalFontAlign = textPaint.getTextAlign();
-        int originalColor = paint.getColor();
-        Paint.Style originalStyle = paint.getStyle();
+//        float originalFontSize = textPaint.getTextSize();
+//        Paint.Align originalFontAlign = textPaint.getTextAlign();
+//        int originalColor = paint.getColor();
+//        Paint.Style originalStyle = paint.getStyle();
         /*
         W = 360
         w1 = 20
@@ -291,10 +310,10 @@ public class GameView extends View {
         textPaint.setTextSize(16);
         textPaint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText("final scores: ", w2 / 2, (h2 - 16) / 2 + 16, textPaint);
-        //绘制实际的分数
+
         String allScore = String.valueOf(caculateScores());
         canvas.drawText(allScore, w2 / 2, (h3 - 16) / 2 + 16, textPaint);
-        //绘制按钮边框
+
         Rect rect2 = new Rect();
         rect2.left = (w2 - buttonWidth) / 2;
         rect2.right = w2 - rect2.left;
@@ -359,13 +378,46 @@ public class GameView extends View {
 
     }
 
-    // remove the rivals
-    private void removePlanets(){
-
-    }
 
     private void addPlanets(int Width){
+        Planet p = null;
+        int speed = 4;
+        //callTime表示createRandomSprites方法被调用的次数
+        int callTime = Math.round(frame / 50);
+        if((callTime + 1) % 25 == 0){
+            //发送道具奖品
+            if((callTime + 1) % 50 == 0){
+                p = new LaserCredit(bitmaps.get(8));
+            }
+        }
+        else{
+            //发送敌机
+            int[] nums = {0,0,0,0,0,1,0,0,1,0,0,0,0,1,1,1,1,1,1,0};
+            int index = (int)Math.floor(nums.length*Math.random());
+            int type = nums[index];
+            if(type == 0){
+                p = new Mercury(bitmaps.get(4));
+            }
+            else {
+                p = new Jupiter(bitmaps.get(5));
+                speed=2;
+            }
 
+        }
+
+        if(p != null){
+            float pW = p.getWidth();
+            float pH = p.getHeight();
+            float x = (float)((Width - pW)*Math.random());
+            float y = - pH;
+            p.setX(x);
+            p.setY(y);
+            if(p instanceof NewStar){
+                NewStar nStar = (NewStar) p;
+                nStar.setSpeed(speed);
+            }
+            toAddPlanets.add(p);
+        }
     }
 
     // deal with all touches actions
@@ -422,27 +474,42 @@ public class GameView extends View {
 
 
     ///////////////////////////////
-    // remove the bitmaps which are cant be resued
-    private void removeBitmaps(){
-    }
-
 
     public void remove(){
+        status = 4;
+        frame = 0;
+        score = 0;
+        if(spaceShip != null){
+            spaceShip.destroy();
+        }
+        spaceShip = null;
+        for(Planet p : planets){
+            p.destroy();
+        }
+        planets.clear();
+        // clear bitmaps
+        for(Bitmap bitmap : bitmaps){
+            bitmap.recycle();
+        }
+        bitmaps.clear();
 
     }
 
 
-    ////////////////
     public void addPlanet(Planet planet){
-
+        toAddPlanets.add(planet);
     }
 
     public void changeScore(int grade){
-        // score += grade
+        score += grade;
+    }
+
+    public float getDensity(){
+        return density;
     }
 
     public int getState(){
-        return 0;
+        return status;
     }
 
     public float getResult(){
@@ -450,19 +517,26 @@ public class GameView extends View {
     }
 
     public Bitmap getYellowBulletBitmap(){
-        return null;
+        return bitmaps.get(2);
     }
 
     public Bitmap getBlueBulletBitmap(){
-        return null;
+        return bitmaps.get(3);
     }
 
     public Bitmap getExplosionBitmap(){
-        return null;
+        return bitmaps.get(1);
     }
 
-    public List<NewStar> getAliveEnemyPlanes(){
-        return null;
+    public List<Planet> getAliveEnemyPlanes(){
+        List<Planet> planetList = new ArrayList<Planet>();
+        for(Planet p : planets){
+            if(!p.isDestroyed() && p instanceof Star){
+                Star s = (Star) p;
+                planetList.add(s);
+            }
+        }
+        return planetList;
     }
 
     public List<NuclearCredit> getAliveBombAwards(){
@@ -474,7 +548,14 @@ public class GameView extends View {
     }
 
     public List<Laser> getAliveBullets(){
-        return null;
+        List<Laser> ll = new ArrayList<Laser>();
+        for(Planet p : planets){
+            if(!p.isDestroyed() && p instanceof Laser){
+                Laser l = (Laser) p;
+                ll.add(l);
+            }
+        }
+        return ll;
     }
 
 
