@@ -109,11 +109,7 @@ public class GameView extends View {
         status = 1;
         postInvalidate();
     }
-
-//    private void setAfterViewsReady(){
-//
-//
-//    }
+    
 
     private void restart(){
         destroyNotRecyleBitmaps();
@@ -137,10 +133,31 @@ public class GameView extends View {
 
 
     // Draw all the game views
-
     protected void onDraw(Canvas canvas){
-        if(isSingleClick()){
-            onSingleClick(touchX, touchY);
+        boolean checkSingleClick = false;
+        if(lastSingleClickTime > 0){
+            long duration = System.currentTimeMillis() - lastSingleClickTime;
+            if(duration >= doubleDuration){
+                checkSingleClick = true;
+                lastSingleClickTime = -1;
+                tDownTime = -1;
+                tUpTime = -1;
+            }
+        }
+        if(checkSingleClick){
+            if(status == 1){
+                if(isClickPause(x, y)){
+                    pause();
+                }
+            }else if(status == 2){
+                if(isClickContinueButton(x, y)){
+                    resume();
+                }
+            }else if(status == 3){
+                if(isClickRestartButton(x, y)){
+                    restart();
+                }
+            }
         }
 
         super.onDraw(canvas);
@@ -181,9 +198,9 @@ public class GameView extends View {
         frame++;
 
         //遍历sprites，绘制敌机、子弹、奖励、爆炸效果
-        Iterator<src.main.java.com.example.interstellarwar.Planet> iterator = planets.iterator();
+        Iterator<Planet> iterator = planets.iterator();
         while (iterator.hasNext()){
-            src.main.java.com.example.interstellarwar.Planet p = iterator.next();
+            Planet p = iterator.next();
 
             if(!p.isDestroyed()){
                 //在Sprite的draw方法内有可能会调用destroy方法
@@ -285,21 +302,20 @@ public class GameView extends View {
         if(status == 1){
             if(tType == 1){
                 if(spaceShip != null){
-                    spaceShip.ce(tX, tY);
+                    spaceShip.centerTo(tX, tY);
                 }
-            }else if(touchType == TOUCH_DOUBLE_CLICK){
-                if(status == STATUS_GAME_STARTED){
-                    if(combatAircraft != null){
-                        //双击会使得战斗机使用炸弹
-                        combatAircraft.bomb(this);
+            }else if(tType == 3){
+                if(status == 1){
+                    if(spaceShip != null){
+                        spaceShip.laser(this);
                     }
                 }
             }
-        }else if(status == STATUS_GAME_PAUSED){
+        }else if(status == 2){
             if(lastSingleClickTime > 0){
                 postInvalidate();
             }
-        }else if(status == STATUS_GAME_OVER){
+        }else if(status == 3){
             if(lastSingleClickTime > 0){
                 postInvalidate();
             }
