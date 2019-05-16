@@ -10,7 +10,7 @@ import android.graphics.RectF;
  * user control, can exchange position
  */
 
-public class SpaceShip extends src.main.java.com.example.interstellarwar.Planet {
+public class SpaceShip extends Planet {
     private boolean collide = false; // if spaceship is collided
     private int nuclearNo = 0; // the available number of nuclear
 

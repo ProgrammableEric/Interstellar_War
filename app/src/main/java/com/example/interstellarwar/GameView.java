@@ -56,14 +56,14 @@ public class GameView extends View {
     //    private static final int TOUCH_SINGLE_CLICK = 2;//单击
     //    private static final int TOUCH_DOUBLE_CLICK = 3;//双击
     //    //一次单击事件由DOWN和UP两个事件合成，假设从down到up间隔小于200毫秒，我们就认为发生了一次单击事件
-    //    private static final int singleClickDurationTime = 200;
+    private static final int singleDuration = 200;
     //    //一次双击事件由两个点击事件合成，两个单击事件之间小于300毫秒，我们就认为发生了一次双击事件
-    //    private static final int doubleClickDurationTime = 300;
-    //    private long lastSingleClickTime = -1;//上次发生单击的时刻
-    //    private long touchDownTime = -1;//触点按下的时刻
-    //    private long touchUpTime = -1;//触点弹起的时刻
-    //    private float touchX = -1;//触点的x坐标
-    //    private float touchY = -1;//触点的y坐标
+    private static final int doubleDuration = 300;
+    private long lastSingleClickTime = -1;
+    private long tDownTime = -1;
+    private long tUpTime = -1;
+    private float tX = -1;
+    private float tY = -1;
 
 
     private long score = 0;//total grades for the reuslt
@@ -258,12 +258,56 @@ public class GameView extends View {
 
     // deal with all touches actions
     public boolean onTouchEvent(MotionEvent event){
-        return  false;
+        int action = event.getAction();
+        tX = event.getX();
+        tY = event.getY();
+        //1-move;  2-singleclick; 3-doubleclick
+        int tType = -1;
+        switch (action){
+            case MotionEvent.ACTION_MOVE: long finishTime = System.currentTimeMillis() - tDownTime;
+                if(finishTime > singleDuration){
+                    tType = 1;
+                }
+                break;
+            case MotionEvent.ACTION_DOWN: tDownTime = System.currentTimeMillis();break;
+            case MotionEvent.ACTION_UP: tUpTime = System.currentTimeMillis();
+                long finishDuration = tUpTime - tDownTime;
+                if(finishDuration <= singleDuration){
+                    long twoClicksDuration = tUpTime - lastSingleClickTime;
+                    if(twoClicksDuration<=doubleDuration){
+                        tType = 3;
+                        lastSingleClickTime = -1;
+                        tUpTime = -1;
+                    }}break;
+            default:lastSingleClickTime = tUpTime;break;
+        }
+        // start:1   pause:2   over:3  destroy:4
+        if(status == 1){
+            if(tType == 1){
+                if(spaceShip != null){
+                    spaceShip.ce(tX, tY);
+                }
+            }else if(touchType == TOUCH_DOUBLE_CLICK){
+                if(status == STATUS_GAME_STARTED){
+                    if(combatAircraft != null){
+                        //双击会使得战斗机使用炸弹
+                        combatAircraft.bomb(this);
+                    }
+                }
+            }
+        }else if(status == STATUS_GAME_PAUSED){
+            if(lastSingleClickTime > 0){
+                postInvalidate();
+            }
+        }else if(status == STATUS_GAME_OVER){
+            if(lastSingleClickTime > 0){
+                postInvalidate();
+            }
+        }
+        return true;
+
     }
 
-    private int setTouch(MotionEvent event){
-        return 0;
-    }
 
 //    private boolean checkSingleClick(){
 //        return false;
