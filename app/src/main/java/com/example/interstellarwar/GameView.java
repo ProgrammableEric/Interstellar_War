@@ -214,7 +214,7 @@ public class GameView extends View {
         drawScoreAndBombs(canvas);
 
         //调用Sprite的onDraw方法，而非draw方法，这样就能渲染静态的Sprite，而不让Sprite改变位置
-        for(src.main.java.com.example.interstellarwar.Planet p : planets){
+        for(Planet p : planets){
             p.onDeploy(canvas, paint, this);
         }
         if(spaceShip != null){
