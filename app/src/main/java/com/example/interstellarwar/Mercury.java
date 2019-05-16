@@ -6,6 +6,6 @@ public class Mercury extends NewStar {
     public Mercury(Bitmap bm){
         super(bm);
         setResistance(1);//mercury is one
-        setGrade(1000);//merrcury grade is 1000
+        setGrade(1000);//mercury grade is 1000
     }
 }
