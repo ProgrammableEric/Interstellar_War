@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.text.TextPaint;
 import android.util.AttributeSet;
@@ -49,7 +50,7 @@ public class GameView extends View {
     private float fontSize = 12;
     private float fontSize2 = 20;
     private float borderSize = 2;
-    //    private Rect continueRect = new Rect();//"继续"、"重新开始"按钮的Rect
+    private Rect continueRect = new Rect();
     //
     //    //触摸事件相关的变量
     //    private static final int TOUCH_MOVE = 1;//移动
@@ -109,10 +110,10 @@ public class GameView extends View {
         status = 1;
         postInvalidate();
     }
-    
+
 
     private void restart(){
-        destroyNotRecyleBitmaps();
+        removeBitmaps();
         spaceShip = new SpaceShip(bitmaps.get(0));
         status = 1;
         postInvalidate();
@@ -146,16 +147,26 @@ public class GameView extends View {
         }
         if(checkSingleClick){
             if(status == 1){
-                if(isClickPause(x, y)){
-                    pause();
+                Bitmap pauseBitmap = bitmaps.get(9);
+                RectF recF = new RectF();
+                recF.left = 15 * density;
+                recF.top = 15 * density;
+                recF.right = recF.left + pauseBitmap.getWidth();
+                recF.bottom = recF.top + pauseBitmap.getHeight();
+                if(recF.contains(tX, tY)){
+                    status = 2;
                 }
             }else if(status == 2){
-                if(isClickContinueButton(x, y)){
-                    resume();
+                if(continueRect.contains((int)tX, (int)tY)){
+                    status = 1;
+                    postInvalidate();
                 }
             }else if(status == 3){
-                if(isClickRestartButton(x, y)){
-                    restart();
+                if(continueRect.contains((int)tX, (int)tY)){
+                    removeBitmaps();
+                    spaceShip = new SpaceShip(bitmaps.get(0));
+                    status = 1;
+                    postInvalidate();
                 }
             }
         }
@@ -172,8 +183,7 @@ public class GameView extends View {
     }
 
     private void drawGaming(Canvas canvas){
-        drawScoreAndBombs(canvas);
-
+        //drawScoreAndBombs(canvas);
         //locate spaceship at center of the bottom of canvas
         if(frame == 0){
             spaceShip.centerTo(canvas.getWidth() / 2, canvas.getHeight() - spaceShip.getHeight() / 2);
@@ -188,74 +198,159 @@ public class GameView extends View {
         //检查战斗机跑到子弹前面的情况
 //        destroyBulletsFrontOfCombatAircraft();
 
-        //在绘制之前先移除掉已经被destroyed的Sprite
-        removeDestroyedSprites();
-
-        //每隔30帧随机添加Sprite
-        if(frame % 50 == 0){
-            createRandomSprites(canvas.getWidth());
-        }
-        frame++;
-
-        //遍历sprites，绘制敌机、子弹、奖励、爆炸效果
         Iterator<Planet> iterator = planets.iterator();
         while (iterator.hasNext()){
             Planet p = iterator.next();
-
-            if(!p.isDestroyed()){
-                //在Sprite的draw方法内有可能会调用destroy方法
-                p.draw(canvas, paint, this);
-            }
-
-            //我们此处要判断Sprite在执行了draw方法后是否被destroy掉了
             if(p.isDestroyed()){
-                //如果Sprite被销毁了，那么从Sprites中将其移除
                 iterator.remove();
             }
         }
 
+        //每隔30帧随机添加Sprite
+//        if(frame % 50 == 0){
+//            addPlanets(canvas.getWidth());
+//        }
+        frame++;
+
+        //draw all the items
+        Iterator<Planet> iterator = planets.iterator();
+        while (iterator.hasNext()){
+            Planet p = iterator.next();
+            if(!p.isDestroyed()){
+                p.Deploy(canvas, paint, this);
+            }
+            if(p.isDestroyed()){
+                iterator.remove();
+            }
+        }
         if(spaceShip != null){
-            //最后绘制战斗机
-            spaceShip.draw(canvas, paint, this);
+            spaceShip.Deploy(canvas, paint, this);
             if(spaceShip.isDestroyed()){
-                //如果战斗机被击中销毁了，那么游戏结束
                 status = 4;
             }
-            //通过调用postInvalidate()方法使得View持续渲染，实现动态效果
             postInvalidate();
         }
 
     }
 
     private void drawPausing(Canvas canvas){
-        drawScoreAndBombs(canvas);
-
-        //调用Sprite的onDraw方法，而非draw方法，这样就能渲染静态的Sprite，而不让Sprite改变位置
+        //drawScoreAndBombs(canvas);
         for(Planet p : planets){
             p.onDeploy(canvas, paint, this);
         }
         if(spaceShip != null){
             spaceShip.beforeDeploy(canvas, paint, this);
         }
-
-        //绘制Dialog，显示得分
-        drawScoreDialog(canvas, "continue");
-
+        drawScoreResults(canvas, "Continue");
         if(lastSingleClickTime > 0){
             postInvalidate();
         }
-
     }
 
     private void drawOver(Canvas canvas){
-
+        drawScoreResults(canvas, "Restart");
+        if(lastSingleClickTime > 0){
+            postInvalidate();
+        }
     }
 
     private void drawScoreResults(Canvas canvas, String operation){
+        int cW = canvas.getWidth();
+        int cH = canvas.getHeight();
+        float originalFontSize = textPaint.getTextSize();
+        Paint.Align originalFontAlign = textPaint.getTextAlign();
+        int originalColor = paint.getColor();
+        Paint.Style originalStyle = paint.getStyle();
+        /*
+        W = 360
+        w1 = 20
+        w2 = 320
+        buttonWidth = 140
+        buttonHeight = 42
+        H = 558
+        h1 = 150
+        h2 = 60
+        h3 = 124
+        h4 = 76
+        */
+        int w1 = (int)(0.05 * cW);
+        int w2 = cW - 2 * w1;
+        int buttonWidth = (int)(0.25 * cW);
+
+        int h1= (int)(0.2 * cH);
+        int h2 = (int)(0.1 * cH);
+        int h3 = (int)(0.2 * cH);
+        int h4 = (int)(0.1 * cH);
+        int buttonHeight = (int)(0.1 * cH);
+
+        canvas.translate(w1, h1);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(0xFFD7DDDE);
+        Rect rect1 = new Rect(0, 0, w2, cH - 2 * h1);
+        canvas.drawRect(rect1, paint);
+        textPaint.setTextSize(16);
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText("final scores: ", w2 / 2, (h2 - 16) / 2 + 16, textPaint);
+        //绘制实际的分数
+        String allScore = String.valueOf(caculateScores());
+        canvas.drawText(allScore, w2 / 2, (h3 - 16) / 2 + 16, textPaint);
+        //绘制按钮边框
+        Rect rect2 = new Rect();
+        rect2.left = (w2 - buttonWidth) / 2;
+        rect2.right = w2 - rect2.left;
+        rect2.top = (h4 - buttonHeight) / 2;
+        rect2.bottom = h4 - rect2.top;
+        canvas.drawRect(rect2, paint);
+        canvas.translate(0, rect2.top);
+        canvas.drawText(operation, w2 / 2, (buttonHeight - 16) / 2 + 16, textPaint);
+        continueRect = new Rect(rect2);
+        continueRect.left = w1 + rect2.left;
+        continueRect.right = continueRect.left + buttonWidth;
+        continueRect.top = h1 + h2 + h3 + rect2.top;
+        continueRect.bottom = continueRect.top + buttonHeight;
+
+//        textPaint.setTextSize(originalFontSize);
+//        textPaint.setTextAlign(originalFontAlign);
+//        paint.setColor(originalColor);
+//        paint.setStyle(originalStyle);
 
     }
 
     private void drawScoreAndBombs(Canvas canvas){
+
+        // try to hide this
+        Bitmap pauseBm;
+        if(status==1){
+            pauseBm = bitmaps.get(9);
+        }else{
+            pauseBm = bitmaps.get(10);
+        }
+        RectF recF = new RectF();
+        recF.left = 15 * density;
+        recF.top = 15 * density;
+        recF.right = recF.left + pauseBm.getWidth();
+        recF.bottom = recF.top + pauseBm.getHeight();
+        float pauseLeft = recF.left;
+        float pauseTop = recF.top;
+        canvas.drawBitmap(pauseBm, pauseLeft, pauseTop, paint);
+        float scoreLeft = pauseLeft + pauseBm.getWidth() + 20 * density;
+        float scoreTop = fontSize + pauseTop + pauseBm.getHeight() / 2 - fontSize / 2;
+        canvas.drawText(score + "", scoreLeft, scoreTop, textPaint);
+
+        //绘制左下角
+        if(spaceShip != null && !spaceShip.isDestroyed()){
+            int num = spaceShip.getNuclearNo();
+            if(num > 0){
+                //绘制左下角的炸弹
+                Bitmap bombBitmap = bitmaps.get(11);
+                float bombTop = canvas.getHeight() - bombBitmap.getHeight();
+                canvas.drawBitmap(bombBitmap, 0, bombTop, paint);
+                //绘制左下角的炸弹数量
+                float bombCountLeft = bombBitmap.getWidth() + 10 * density;
+                float bombCountTop = fontSize + bombTop + bombBitmap.getHeight() / 2 - fontSize / 2;
+                canvas.drawText("X " + num, bombCountLeft, bombCountTop, textPaint);
+            }
+        }
 
     }
 
@@ -269,7 +364,7 @@ public class GameView extends View {
 
     }
 
-    private void deployPlanets(int Width){
+    private void addPlanets(int Width){
 
     }
 
@@ -324,32 +419,6 @@ public class GameView extends View {
 
     }
 
-
-//    private boolean checkSingleClick(){
-//        return false;
-//    }
-
-    private void onSingleClick(float x, float y){
-
-    }
-
-    private boolean PauseClick(float x, float y){
-        return false;
-    }
-
-    // continue game when game is being paused
-    private boolean ContinueGame(float x, float y){
-        return false;
-    }
-
-    private boolean RestartGame(float x, float y){
-        return false;
-    }
-
-    // getBitMaps when pausing
-    private RectF getBitmapDstRecF(){
-        return null;
-    }
 
 
     ///////////////////////////////
