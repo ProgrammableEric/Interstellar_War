@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
 
+import java.util.List;
+
 /**
  * user control, can exchange position
  */
@@ -110,7 +112,7 @@ public class SpaceShip extends Planet {
         if(!collide){
             List<NewStar> enemies = gameView.getAliveEnemyPlanes();
             for(NewStar enemyPlane : enemies){
-                Point p = getCollidePointWithOther(enemyPlane);
+                Point p = getCollidedBitmapPos(enemyPlane);
                 if(p != null){
                     // p is hit point with star, if p is not null then spaceship is hitted by star
                     explode(gameView);
@@ -142,7 +144,7 @@ public class SpaceShip extends Planet {
             // check if get nuclear credit
             List<NuclearCredit> nuclearCredit = gameView.getAliveBombAwards();
             for(NuclearCredit nc : nuclearCredit){
-                Point p = getCollidePointWithOther(nc);
+                Point p = getCollidedBitmapPos(nc);
                 if(p != null){
                     nuclearNo++;
                     nc.destroy();
@@ -152,7 +154,7 @@ public class SpaceShip extends Planet {
             // check if get laser credit
             List<LaserCredit> laserCredit = gameView.getAliveBulletAwards();
             for(LaserCredit lc : laserCredit){
-                Point p = getCollidePointWithOther(lc);
+                Point p = getCollidedBitmapPos(lc);
                 if(p != null){
                     lc.destroy();
                     single = false;
@@ -190,7 +192,7 @@ public class SpaceShip extends Planet {
         if(nuclearNo > 0){
             List<NewStar> enemyPlanes = gameView.getAliveEnemyPlanes();
             for(NewStar enemyPlane : enemyPlanes){
-                enemyPlane.explode(gameView);
+                enemyPlane.bomb(gameView);
             }
             nuclearNo--;
         }

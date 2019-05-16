@@ -8,10 +8,10 @@ import android.graphics.Bitmap;
 
 public class Jupiter extends NewStar {
 
-    public Jupiter(Bitmap bitmap){
+    public Jupiter(Bitmap bm){
         super(bm);
-        setPower(10); // the resistance of Jupiter is 10, that is, it will be destroyed after 10 laser attack
-        setValue(30000); // the grades for destroy Jupiter is 30000
+        setResistance(10); // the resistance of Jupiter is 10, that is, it will be destroyed after 10 laser attack
+        setGrade(30000); // the grades for destroy Jupiter is 30000
     }
 
 }

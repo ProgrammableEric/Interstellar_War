@@ -114,7 +114,7 @@ public class Planet {
     }
 
     // Get the relative position of bounding rFectangle of planet after colliding
-    public RectF getCollidedPlanet{
+    public RectF getCollidedPlanet() {
         RectF planet = getPlanet();
         planet.left -= Offset;
         planet.right += Offset;
@@ -124,7 +124,7 @@ public class Planet {
     }
 
     // Get the absolute position of bounding rectangle of planet after colliding
-    public getCollidedBitmapPos(Planet p){
+    public Point getCollidedBitmapPos(Planet p){
         Point point = null;
         RectF planet1 = getCollidedPlanet();
         RectF planet2 = p.getCollidedPlanet();
