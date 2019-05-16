@@ -3,6 +3,7 @@ package com.example.interstellarwar;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 
 import java.util.List;
 
@@ -32,15 +33,15 @@ public class NewStar extends Star {
 
     @Override
     protected void finishDeploy(Canvas canvas, Paint paint, GameView gameView){
-        super.afterDraw(canvas, paint, gameView);
+        super.finishDeploy(canvas, paint, gameView);
 
         // check if was shotted after deploying
         if(!isDestroyed()){
             // check if was shotted after star was deployed
-            List<Laser> laser = gameView.getAliveBullets();
-            for(Bullet bullet : bullets){
+            List<Laser> lasers = gameView.getAliveBullets();
+            for(Laser laser : lasers){
                 // check if star hit laser
-                Point p = getCollidePointWithOther(laser);
+                Point p = getCollidedBitmapPos(laser);
                 if(p != null){
                     // if has intersection, laser hit star
                     laser.destroy();
