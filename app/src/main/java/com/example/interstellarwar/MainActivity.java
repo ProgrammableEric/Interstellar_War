@@ -1,7 +1,9 @@
 package com.example.interstellarwar;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -11,7 +13,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void startGame() {
+    public void onClick(View v) {
+        int viewId = v.getId();
+        if(viewId == R.id.button){
+            startGame();
+        }
+    }
 
+    public void startGame(){
+        Intent intent = new Intent(this, StartActivity.class);
+        startActivity(intent);
     }
 }
