@@ -108,7 +108,7 @@ public class SpaceShip extends Planet {
             return;
         }
 
-        // check if spaceship will be shotted before hit
+        // check if spaceship will be shot before hit
         if(!collide){
             List<NewStar> enemies = gameView.getAliveEnemyPlanes();
             for(NewStar enemyPlane : enemies){
