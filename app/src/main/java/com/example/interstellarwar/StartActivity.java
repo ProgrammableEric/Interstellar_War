@@ -11,7 +11,7 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        gameView = (GameView)findViewById(R.id.gameView);
+        gameView = findViewById(R.id.gameView);
         //0:combatAircraft
         //1:explosion
         //2:yellowBullet

@@ -40,24 +40,14 @@ public class GameView extends View {
     //11:nuclear
     private List<Bitmap> bitmaps = new ArrayList<Bitmap>();
     private float density = getResources().getDisplayMetrics().density;
-//    public static final int STATUS_GAME_STARTED = 1;
-//    public static final int STATUS_GAME_PAUSED = 2;
-//    public static final int STATUS_GAME_OVER = 3;
-//    public static final int STATUS_GAME_DESTROYED = 4;
     // start=1  pause=2  over=3  destroyed=4
     private int status = 4;
-    private long frame = 0;
+    private long globalCount = 0;
     private long score = 0;
     private float fontSize = 12;
     private float fontSize2 = 20;
     private float borderSize = 2;
     private Rect continueRect = new Rect();
-    //
-    //    //触摸事件相关的变量
-    //    private static final int TOUCH_MOVE = 1;//移动
-    //    private static final int TOUCH_SINGLE_CLICK = 2;//单击
-    //    private static final int TOUCH_DOUBLE_CLICK = 3;//双击
-    //    //一次单击事件由DOWN和UP两个事件合成，假设从down到up间隔小于200毫秒，我们就认为发生了一次单击事件
     //duration between up and down action
     private static final int singleDuration = 200;
     // double click means short duration between two single clicks
@@ -71,33 +61,30 @@ public class GameView extends View {
     public GameView(Context context) {
         super(context);
         //beginView(null,0);
+        beginView(null,0);
+    }
+
+    public GameView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        beginView(attrs, 0);
+    }
+
+    public GameView(Context context, AttributeSet attrs, int style) {
+        super(context, attrs, style);
+        beginView(attrs, style);
+
+    }
+
+    private void beginView(AttributeSet attribs, int style){
+        final TypedArray a = getContext().obtainStyledAttributes(attribs, R.styleable.GameView, style, 0);
+        a.recycle();
+        // initial setting appearance
         paint = new Paint();
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.ANTI_ALIAS_FLAG);
         fontSize = textPaint.getTextSize();
         textPaint.setTextSize(15);
+
     }
-
-//    public GameView(Context context, AttributeSet attrs) {
-//        super(context, attrs);
-//        beginView(attrs, 0);
-//    }
-//
-//    public GameView(Context context, AttributeSet attrs, int style) {
-//        super(context, attrs, style);
-//        beginView(attrs, style);
-//
-//    }
-
-//    private void beginView(AttributeSet attribs, int style){
-//        final TypedArray a = getContext().obtainStyledAttributes(attribs, R.styleable.GameView, style, 0);
-//        a.recycle();
-//        // initial setting appearances
-//        paint = new Paint();
-//        textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.ANTI_ALIAS_FLAG);
-//        fontSize = textPaint.getTextSize();
-//        textPaint.setTextSize(15);
-//
-//    }
 
     public void startSeting(int[] bmIds){
         remove();
@@ -113,7 +100,7 @@ public class GameView extends View {
 
     private void restart(){
         status = 4;
-        frame = 0;
+        globalCount = 0;
         score = 0;
         if(spaceShip != null){
             spaceShip.destroy();
@@ -173,7 +160,7 @@ public class GameView extends View {
             }else if(status == 3){
                 if(continueRect.contains((int)tX, (int)tY)){
                     status = 4;
-                    frame = 0;
+                    globalCount = 0;
                     score = 0;
                     if(spaceShip != null){
                         spaceShip.destroy();
@@ -204,10 +191,9 @@ public class GameView extends View {
     private void drawGaming(Canvas canvas){
         //drawScoreAndBombs(canvas);
         //locate spaceship at center of the bottom of canvas
-        if(frame == 0){
+        if(globalCount == 0){
             spaceShip.centerTo(canvas.getWidth() / 2, canvas.getHeight() - spaceShip.getHeight() / 2);
         }
-
         // add toadd planets
         if(toAddPlanets.size() > 0){
             planets.addAll(toAddPlanets);
@@ -221,16 +207,13 @@ public class GameView extends View {
         while (iterator.hasNext()){
             Planet p = iterator.next();
             if(p.isDestroyed()){
-                iterator.remove();
+                p.destroy();
             }
         }
-
-        //每隔30帧随机添加Sprite
-//        if(frame % 50 == 0){
-//            addPlanets(canvas.getWidth());
-//        }
-        frame++;
-
+        if(globalCount %30==0){
+            addPlanets(canvas.getWidth()); //add new planet
+        }
+        globalCount++;
         //draw all the items
         Iterator<Planet> iterator2 = planets.iterator();
         while (iterator2.hasNext()){
@@ -239,7 +222,7 @@ public class GameView extends View {
                 p.Deploy(canvas, paint, this);
             }
             if(p.isDestroyed()){
-                iterator.remove();
+                p.destroy();
             }
         }
         if(spaceShip != null){
@@ -383,7 +366,7 @@ public class GameView extends View {
         Planet p = null;
         int speed = 4;
         //callTime表示createRandomSprites方法被调用的次数
-        int callTime = Math.round(frame / 50);
+        int callTime = Math.round(globalCount / 50);
         if((callTime + 1) % 25 == 0){
             //发送道具奖品
             if((callTime + 1) % 50 == 0){
@@ -399,7 +382,7 @@ public class GameView extends View {
                 p = new Mercury(bitmaps.get(4));
             }
             else {
-                p = new Jupiter(bitmaps.get(5));
+                p = new Jupiter(bitmaps.get(6));
                 speed=2;
             }
 
@@ -477,7 +460,7 @@ public class GameView extends View {
 
     public void remove(){
         status = 4;
-        frame = 0;
+        globalCount = 0;
         score = 0;
         if(spaceShip != null){
             spaceShip.destroy();
@@ -528,11 +511,11 @@ public class GameView extends View {
         return bitmaps.get(1);
     }
 
-    public List<Planet> getAliveEnemyPlanes(){
-        List<Planet> planetList = new ArrayList<Planet>();
+    public List<NewStar> getAliveEnemyPlanes(){
+        List<NewStar> planetList = new ArrayList<NewStar>();
         for(Planet p : planets){
-            if(!p.isDestroyed() && p instanceof Star){
-                Star s = (Star) p;
+            if(!p.isDestroyed() && p instanceof NewStar){
+                NewStar s = (NewStar) p;
                 planetList.add(s);
             }
         }
