@@ -12,7 +12,6 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import com.example.interstellarwar.R;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,7 +42,7 @@ public class GameView extends View {
     private float density = getResources().getDisplayMetrics().density;
     // start=1  pause=2  over=3  destroyed=4
     private int status = 4;
-    private long frame = 0;
+    private long globalCount = 0;
     private long score = 0;
     private float fontSize = 12;
     private float fontSize2 = 20;
@@ -101,7 +100,7 @@ public class GameView extends View {
 
     private void restart(){
         status = 4;
-        frame = 0;
+        globalCount = 0;
         score = 0;
         if(spaceShip != null){
             spaceShip.destroy();
@@ -161,7 +160,7 @@ public class GameView extends View {
             }else if(status == 3){
                 if(continueRect.contains((int)tX, (int)tY)){
                     status = 4;
-                    frame = 0;
+                    globalCount = 0;
                     score = 0;
                     if(spaceShip != null){
                         spaceShip.destroy();
@@ -192,12 +191,10 @@ public class GameView extends View {
     private void drawGaming(Canvas canvas){
         //drawScoreAndBombs(canvas);
         //locate spaceship at center of the bottom of canvas
-        if(frame == 0){
+        if(globalCount == 0){
             spaceShip.centerTo(canvas.getWidth() / 2, canvas.getHeight() - spaceShip.getHeight() / 2);
         }
-
         // add toadd planets
-        System.out.println(toAddPlanets.size());
         if(toAddPlanets.size() > 0){
             planets.addAll(toAddPlanets);
             toAddPlanets.clear();
@@ -213,15 +210,10 @@ public class GameView extends View {
                 p.destroy();
             }
         }
-
-        //每隔30帧随机添加Sprite
-        if(frame%30==0){
-            addPlanets(canvas.getWidth());
+        if(globalCount %30==0){
+            addPlanets(canvas.getWidth()); //add new planet
         }
-
-
-        frame++;
-
+        globalCount++;
         //draw all the items
         Iterator<Planet> iterator2 = planets.iterator();
         while (iterator2.hasNext()){
@@ -374,7 +366,7 @@ public class GameView extends View {
         Planet p = null;
         int speed = 4;
         //callTime表示createRandomSprites方法被调用的次数
-        int callTime = Math.round(frame / 50);
+        int callTime = Math.round(globalCount / 50);
         if((callTime + 1) % 25 == 0){
             //发送道具奖品
             if((callTime + 1) % 50 == 0){
@@ -468,7 +460,7 @@ public class GameView extends View {
 
     public void remove(){
         status = 4;
-        frame = 0;
+        globalCount = 0;
         score = 0;
         if(spaceShip != null){
             spaceShip.destroy();
