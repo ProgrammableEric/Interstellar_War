@@ -215,8 +215,10 @@ public class GameView extends View {
         }
 
         //每隔30帧随机添加Sprite
+        if(frame%30==0){
+            addPlanets(canvas.getWidth());
+        }
 
-        addPlanets(canvas.getWidth());
 
         frame++;
 
