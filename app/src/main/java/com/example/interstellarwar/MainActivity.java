@@ -28,20 +28,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick2(View v) {
-        final GameScore gs = new GameScore();
+        GameScore gs = new GameScore();
         gs.setPlayerName("LeoNo1");
         gs.setScore(9999999);
-        gs.save(new SaveListener<String>() {
-            @Override
-            public void done(String s, BmobException e) {
-                if(e == null) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Add data success：" + s, Toast.LENGTH_LONG);
-                    toast.show();
-                } else {
-                    Log.i("bmob","fail："+e.getMessage()+","+e.getErrorCode());
-                }
-            }
-        });
+//        gs.save(new SaveListener<String>() {
+//            @Override
+//            public void done(String s, BmobException e) {
+//                if(e == null) {
+//                    Toast toast = Toast.makeText(getApplicationContext(), "Add data success：" + s, Toast.LENGTH_LONG);
+//                    toast.show();
+//                } else {
+//                    Log.i("bmob","fail："+e.getMessage()+","+e.getErrorCode());
+//                }
+//            }
+//        });
     }
 
     public void startGame(){
