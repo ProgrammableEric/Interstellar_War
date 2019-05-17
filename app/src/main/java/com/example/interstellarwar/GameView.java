@@ -79,20 +79,11 @@ public class GameView extends View {
     private void beginView(AttributeSet attribs, int style){
         final TypedArray a = getContext().obtainStyledAttributes(attribs, R.styleable.GameView, style, 0);
         a.recycle();
-        // initial setting appearances
+        // initial setting appearance
         paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
-        textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.FAKE_BOLD_TEXT_FLAG);
-        textPaint.setColor(0xff000000);
+        textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.ANTI_ALIAS_FLAG);
         fontSize = textPaint.getTextSize();
-        fontSize *= density;
-        fontSize2 *= density;
-        textPaint.setTextSize(fontSize);
-        borderSize *= density;
-//        paint = new Paint();
-//        textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.ANTI_ALIAS_FLAG);
-//        fontSize = textPaint.getTextSize();
-//        textPaint.setTextSize(15);
+        textPaint.setTextSize(15);
 
     }
 
@@ -206,6 +197,7 @@ public class GameView extends View {
         }
 
         // add toadd planets
+        System.out.println(toAddPlanets.size());
         if(toAddPlanets.size() > 0){
             planets.addAll(toAddPlanets);
             toAddPlanets.clear();
@@ -218,14 +210,14 @@ public class GameView extends View {
         while (iterator.hasNext()){
             Planet p = iterator.next();
             if(p.isDestroyed()){
-                iterator.remove();
+                p.destroy();
             }
         }
 
         //每隔30帧随机添加Sprite
-        if(frame % 50 == 0){
-            addPlanets(canvas.getWidth());
-        }
+
+        addPlanets(canvas.getWidth());
+
         frame++;
 
         //draw all the items
@@ -236,7 +228,7 @@ public class GameView extends View {
                 p.Deploy(canvas, paint, this);
             }
             if(p.isDestroyed()){
-                iterator.remove();
+                p.destroy();
             }
         }
         if(spaceShip != null){
@@ -396,7 +388,7 @@ public class GameView extends View {
                 p = new Mercury(bitmaps.get(4));
             }
             else {
-                p = new Jupiter(bitmaps.get(5));
+                p = new Jupiter(bitmaps.get(6));
                 speed=2;
             }
 
