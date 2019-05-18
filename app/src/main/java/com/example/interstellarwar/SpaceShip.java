@@ -63,7 +63,7 @@ public class SpaceShip extends Planet {
         }
     }
 
-    // Lanch laser
+    // Launch laser
     public void laser(GameView gameView){
         //如果战斗机被撞击了或销毁了，那么不会发射子弹
         // if spaceship is hit or destroyed then do not trigger laser
@@ -139,7 +139,7 @@ public class SpaceShip extends Planet {
             }
         }
 
-        // if not hitted check if get the credit
+        // if not hit check if get the credit
         if(!collide){
             // check if get nuclear credit
             List<NuclearCredit> nuclearCredit = gameView.getAliveBombAwards();
