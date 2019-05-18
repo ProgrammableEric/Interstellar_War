@@ -66,7 +66,7 @@ public class SpaceShip extends Planet {
     // Lanch laser
     public void laser(GameView gameView){
         //如果战斗机被撞击了或销毁了，那么不会发射子弹
-        // if spaceship is hitted or detryed then do not trigger laser
+        // if spaceship is hit or destroyed then do not trigger laser
         if(collide || isDestroyed()){
             return;
         }

@@ -1,9 +1,7 @@
 package com.example.interstellarwar;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import cn.bmob.v3.Bmob;
+import android.support.v7.app.AppCompatActivity;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -28,13 +26,13 @@ public class StartActivity extends AppCompatActivity {
         //10:pause2
         //11:bomb
         int[] bitmapIds = {
-                R.drawable.plane,
+                R.drawable.spaceship,
                 R.drawable.explosion,
                 R.drawable.yellow_bullet,
                 R.drawable.blue_bullet,
-                R.drawable.small,
-                R.drawable.middle,
-                R.drawable.big,
+                R.drawable.mercury,
+                R.drawable.mars,
+                R.drawable.jupiter,
                 R.drawable.bomb_award,
                 R.drawable.bullet_award,
                 R.drawable.pause1,
