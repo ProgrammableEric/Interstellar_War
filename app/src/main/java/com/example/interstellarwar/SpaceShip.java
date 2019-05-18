@@ -103,7 +103,7 @@ public class SpaceShip extends Planet {
         }
     }
 
-    protected void afterDeploy(Canvas canvas, Paint paint, GameView gameView){
+    protected void finishDeploy(Canvas canvas, Paint paint, GameView gameView){
         if(isDestroyed()){
             return;
         }
@@ -140,28 +140,28 @@ public class SpaceShip extends Planet {
         }
 
         // if not hit check if get the credit
-        if(!collide){
-            // check if get nuclear credit
-            List<NuclearCredit> nuclearCredit = gameView.getAliveBombAwards();
-            for(NuclearCredit nc : nuclearCredit){
-                Point p = getCollidedBitmapPos(nc);
-                if(p != null){
-                    nuclearNo++;
-                    nc.destroy();
-                }
-            }
-
-            // check if get laser credit
-            List<LaserCredit> laserCredit = gameView.getAliveBulletAwards();
-            for(LaserCredit lc : laserCredit){
-                Point p = getCollidedBitmapPos(lc);
-                if(p != null){
-                    lc.destroy();
-                    single = false;
-                    doubleTime = 0;
-                }
-            }
-        }
+//        if(!collide){
+//            // check if get nuclear credit
+//            List<NuclearCredit> nuclearCredit = gameView.getAliveBombAwards();
+//            for(NuclearCredit nc : nuclearCredit){
+//                Point p = getCollidedBitmapPos(nc);
+//                if(p != null){
+//                    nuclearNo++;
+//                    nc.destroy();
+//                }
+//            }
+//
+//            // check if get laser credit
+//            List<LaserCredit> laserCredit = gameView.getAliveBulletAwards();
+//            for(LaserCredit lc : laserCredit){
+//                Point p = getCollidedBitmapPos(lc);
+//                if(p != null){
+//                    lc.destroy();
+//                    single = false;
+//                    doubleTime = 0;
+//                }
+//            }
+//        }
     }
 
     // Spaceship is collided
