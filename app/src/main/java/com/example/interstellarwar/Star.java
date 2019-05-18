@@ -31,11 +31,12 @@ public class Star extends Planet {
     protected void beforeDeploy(Canvas canvas, Paint paint, GameView gameView) {
         if(!isDestroyed()){
             int index = (int)Math.floor(10*Math.random());
-            if(index%2==0){
-                move(speed * gameView.getDensity(), speed * gameView.getDensity());
-            }else{
-                move(-speed * gameView.getDensity(), speed * gameView.getDensity());
-            }
+            move(speed, speed * gameView.getDensity());
+//            if(index%2==0){
+//                move(0, speed * gameView.getDensity());
+//            }else{
+//                move(0, speed * gameView.getDensity());
+//            }
 
         }
     }
