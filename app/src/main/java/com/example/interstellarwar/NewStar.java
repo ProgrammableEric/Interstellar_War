@@ -35,10 +35,10 @@ public class NewStar extends Star {
     protected void finishDeploy(Canvas canvas, Paint paint, GameView gameView){
         super.finishDeploy(canvas, paint, gameView);
 
-        // check if was shotted after deploying
+        // check if was shot after deploying
         if(!isDestroyed()){
-            // check if was shotted after star was deployed
-            List<Laser> lasers = gameView.getAliveBullets();
+            // check if was shot after star was deployed
+            List<Laser> lasers = gameView.getLasers();
             for(Laser laser : lasers){
                 // check if star hit laser
                 Point p = getCollidedBitmapPos(laser);

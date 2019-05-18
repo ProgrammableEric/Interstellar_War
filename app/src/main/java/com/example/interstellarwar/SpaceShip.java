@@ -65,7 +65,6 @@ public class SpaceShip extends Planet {
 
     // Launch laser
     public void laser(GameView gameView){
-        //如果战斗机被撞击了或销毁了，那么不会发射子弹
         // if spaceship is hit or destroyed then do not trigger laser
         if(collide || isDestroyed()){
             return;
@@ -73,34 +72,34 @@ public class SpaceShip extends Planet {
 
         float x = getX() + getWidth() / 2;
         float y = getY() - 5;
-        if(single){
+//        if(single){
             // single shot mode trigger yellow bullet
-            Bitmap yellowBulletBitmap = gameView.getYellowBulletBitmap();
-            Laser yellowBullet = new Laser(yellowBulletBitmap);
+            Bitmap laserBitmap = gameView.getLaserBitmap();
+            Laser yellowBullet = new Laser(laserBitmap);
             yellowBullet.moveTo(x, y);
             gameView.addPlanet(yellowBullet);
-        }
-        else{
-            // double shop mode trigger blue bullet
-            float offset = getWidth() / 4;
-            float leftX = x - offset;
-            float rightX = x + offset;
-            Bitmap blueBulletBitmap = gameView.getBlueBulletBitmap();
-
-            Laser leftBlueBullet = new Laser(blueBulletBitmap);
-            leftBlueBullet.moveTo(leftX, y);
-            gameView.addPlanet(leftBlueBullet);
-
-            Laser rightBlueBullet = new Laser(blueBulletBitmap);
-            rightBlueBullet.moveTo(rightX, y);
-            gameView.addPlanet(rightBlueBullet);
-
-            doubleTime++;
-            if(doubleTime >= maxDoubleTime){
-                single = true;
-                doubleTime = 0;
-            }
-        }
+//        }
+//        else{
+//            // double shop mode trigger blue bullet
+//            float offset = getWidth() / 4;
+//            float leftX = x - offset;
+//            float rightX = x + offset;
+//            Bitmap blueBulletBitmap = gameView.getBlueBulletBitmap();
+//
+//            Laser leftBlueBullet = new Laser(blueBulletBitmap);
+//            leftBlueBullet.moveTo(leftX, y);
+//            gameView.addPlanet(leftBlueBullet);
+//
+//            Laser rightBlueBullet = new Laser(blueBulletBitmap);
+//            rightBlueBullet.moveTo(rightX, y);
+//            gameView.addPlanet(rightBlueBullet);
+//
+//            doubleTime++;
+//            if(doubleTime >= maxDoubleTime){
+//                single = true;
+//                doubleTime = 0;
+//            }
+//        }
     }
 
     protected void finishDeploy(Canvas canvas, Paint paint, GameView gameView){
@@ -110,9 +109,9 @@ public class SpaceShip extends Planet {
 
         // check if spaceship will be shot before hit
         if(!collide){
-            List<NewStar> enemies = gameView.getAliveEnemyPlanes();
-            for(NewStar enemyPlane : enemies){
-                Point p = getCollidedBitmapPos(enemyPlane);
+            List<NewStar> stars = gameView.getStars();
+            for(NewStar star : stars){
+                Point p = getCollidedBitmapPos(star);
                 if(p != null){
                     // p is hit point with star, if p is not null then spaceship is hitted by star
                     explode(gameView);
@@ -190,7 +189,7 @@ public class SpaceShip extends Planet {
         }
 
         if(nuclearNo > 0){
-            List<NewStar> enemyPlanes = gameView.getAliveEnemyPlanes();
+            List<NewStar> enemyPlanes = gameView.getStars();
             for(NewStar enemyPlane : enemyPlanes){
                 enemyPlane.bomb(gameView);
             }

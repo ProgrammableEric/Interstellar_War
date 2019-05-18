@@ -363,7 +363,7 @@ public class GameView extends View {
     }
 
 
-    public Bitmap getYellowBulletBitmap(){
+    public Bitmap getLaserBitmap(){
         return bitmaps.get(2);
     }
 
@@ -375,7 +375,7 @@ public class GameView extends View {
         return bitmaps.get(1);
     }
 
-    public List<NewStar> getAliveEnemyPlanes(){
+    public List<NewStar> getStars(){
         List<NewStar> planetList = new ArrayList<NewStar>();
         for(Planet p : planets){
             if(!p.isDestroyed() && p instanceof NewStar){
@@ -386,15 +386,7 @@ public class GameView extends View {
         return planetList;
     }
 
-    public List<NuclearCredit> getAliveBombAwards(){
-        return null;
-    }
-
-    public List<LaserCredit> getAliveBulletAwards(){
-        return null;
-    }
-
-    public List<Laser> getAliveBullets(){
+    public List<Laser> getLasers(){
         List<Laser> ll = new ArrayList<Laser>();
         for(Planet p : planets){
             if(!p.isDestroyed() && p instanceof Laser){
