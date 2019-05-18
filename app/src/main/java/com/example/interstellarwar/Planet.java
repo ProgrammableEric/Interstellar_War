@@ -113,7 +113,7 @@ public class Planet {
         return bmPos;
     }
 
-    // Get the relative position of bounding rFectangle of planet after colliding
+    // Get the relative position of bounding rectangle of planet after colliding
     public RectF getCollidedPlanet() {
         RectF planet = getPlanet();
         planet.left -= Offset;

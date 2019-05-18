@@ -59,12 +59,12 @@ public class NewStar extends Star {
 
     public void bomb(GameView gameView){
         // create bombing effect
-        float centerX = getX() + getWidth() / 2;
-        float centerY = getY() + getHeight() / 2;
-        Bitmap bitmap = gameView.getExplosionBitmap();
-        Bombing bombing = new Bombing(bitmap);
-        bombing.centerTo(centerX, centerY);
-        gameView.addPlanet(bombing);
+//        float centerX = getX() + getWidth() / 2;
+//        float centerY = getY() + getHeight() / 2;
+//        Bitmap bitmap = gameView.getExplosionBitmap();
+//        Bombing bombing = new Bombing(bitmap);
+//        bombing.centerTo(centerX, centerY);
+//        gameView.addPlanet(bombing);
 
         // after bombing, add grades to GameView and destroy star
         gameView.changeScore(grade);

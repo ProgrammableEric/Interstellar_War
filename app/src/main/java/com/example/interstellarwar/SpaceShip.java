@@ -63,10 +63,10 @@ public class SpaceShip extends Planet {
         }
     }
 
-    // Lanch laser
+    // Launch laser
     public void laser(GameView gameView){
         //如果战斗机被撞击了或销毁了，那么不会发射子弹
-        // if spaceship is hitted or detryed then do not trigger laser
+        // if spaceship is hit or destroyed then do not trigger laser
         if(collide || isDestroyed()){
             return;
         }
@@ -103,7 +103,7 @@ public class SpaceShip extends Planet {
         }
     }
 
-    protected void afterDeploy(Canvas canvas, Paint paint, GameView gameView){
+    protected void finishDeploy(Canvas canvas, Paint paint, GameView gameView){
         if(isDestroyed()){
             return;
         }
@@ -132,36 +132,36 @@ public class SpaceShip extends Planet {
                     setVisibility(!visible);
                     flashTime++;
                     if(flashTime >= maxFlashTime){
-                        // if the flash time superior max falsh time, then destroy spaceship
+                        // if the flash time superior max flash time, then destroy spaceship
                         destroy();
                     }
                 }
             }
         }
 
-        // if not hitted check if get the credit
-        if(!collide){
-            // check if get nuclear credit
-            List<NuclearCredit> nuclearCredit = gameView.getAliveBombAwards();
-            for(NuclearCredit nc : nuclearCredit){
-                Point p = getCollidedBitmapPos(nc);
-                if(p != null){
-                    nuclearNo++;
-                    nc.destroy();
-                }
-            }
-
-            // check if get laser credit
-            List<LaserCredit> laserCredit = gameView.getAliveBulletAwards();
-            for(LaserCredit lc : laserCredit){
-                Point p = getCollidedBitmapPos(lc);
-                if(p != null){
-                    lc.destroy();
-                    single = false;
-                    doubleTime = 0;
-                }
-            }
-        }
+        // if not hit check if get the credit
+//        if(!collide){
+//            // check if get nuclear credit
+//            List<NuclearCredit> nuclearCredit = gameView.getAliveBombAwards();
+//            for(NuclearCredit nc : nuclearCredit){
+//                Point p = getCollidedBitmapPos(nc);
+//                if(p != null){
+//                    nuclearNo++;
+//                    nc.destroy();
+//                }
+//            }
+//
+//            // check if get laser credit
+//            List<LaserCredit> laserCredit = gameView.getAliveBulletAwards();
+//            for(LaserCredit lc : laserCredit){
+//                Point p = getCollidedBitmapPos(lc);
+//                if(p != null){
+//                    lc.destroy();
+//                    single = false;
+//                    doubleTime = 0;
+//                }
+//            }
+//        }
     }
 
     // Spaceship is collided
@@ -169,12 +169,12 @@ public class SpaceShip extends Planet {
         if(!collide){
             collide = true;
             setVisibility(false);
-            float centerX = getX() + getWidth() / 2;
-            float centerY = getY() + getHeight() / 2;
-            Bombing bombing = new Bombing(gameView.getExplosionBitmap());
-            bombing.centerTo(centerX, centerY);
-            gameView.addPlanet(bombing);
-            beginFlashFrame = getTimes() + bombing.getTime();
+//            float centerX = getX() + getWidth() / 2;
+//            float centerY = getY() + getHeight() / 2;
+//            Bombing bombing = new Bombing(gameView.getExplosionBitmap());
+//            bombing.centerTo(centerX, centerY);
+//            gameView.addPlanet(bombing);
+            beginFlashFrame = getTimes();
         }
     }
 
