@@ -33,8 +33,7 @@ public class GameView extends View {
     //5:mars
     //6:jupiter
     //7:nuclearCredit
-    //9:pause1
-    //10:pause2
+    //9:pause
     //11:nuclear
     private List<Bitmap> bitmaps = new ArrayList<Bitmap>();
     private float density = getResources().getDisplayMetrics().density;
@@ -58,22 +57,18 @@ public class GameView extends View {
 
     public GameView(Context context) {
         super(context);
-        //beginView(null,0);
-        beginView(null,0);
+        final TypedArray a = getContext().obtainStyledAttributes(null, R.styleable.GameView, 0, 0);
+        a.recycle();
     }
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        beginView(attrs, 0);
+        final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.GameView, 0, 0);
+        a.recycle();
     }
 
     public GameView(Context context, AttributeSet attrs, int style) {
         super(context, attrs, style);
-        beginView(attrs, style);
-
-    }
-
-    private void beginView(AttributeSet attrs, int style){
         final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.GameView, style, 0);
         a.recycle();
     }
@@ -135,12 +130,12 @@ public class GameView extends View {
         }
         if(checkSingleClick){
             if(status == 1){
-                Bitmap pauseBitmap = bitmaps.get(9);
                 RectF recF = new RectF();
-                recF.left = 15 * density;
-                recF.top = 15 * density;
-                recF.right = recF.left + pauseBitmap.getWidth();
-                recF.bottom = recF.top + pauseBitmap.getHeight();
+                Bitmap bm = bitmaps.get(9);
+                recF.left = canvas.getWidth()/2-bm.getWidth()/2;
+                recF.top = canvas.getHeight()*0.9f;
+                recF.right = recF.left + bm.getWidth();
+                recF.bottom = recF.top + bm.getHeight();
                 if(recF.contains(tX, tY)){
                     status = 2;
                 }
@@ -181,7 +176,13 @@ public class GameView extends View {
     }
 
     private void drawGaming(Canvas canvas){
-        drawScoreAndBombs(canvas);
+        RectF recF = new RectF();
+        Bitmap bm = bitmaps.get(9);
+        recF.left = canvas.getWidth()/2-bm.getWidth()/2;
+        recF.top = canvas.getHeight()*0.9f;
+        recF.right = recF.left + bm.getWidth();
+        recF.bottom = recF.top + bm.getHeight();
+        canvas.drawBitmap(bm, recF.left, recF.top, paint);
         //locate spaceship at center of the bottom of canvas
         if(globalCount == 0){
             spaceShip.centerTo(canvas.getWidth()*0.2f, canvas.getHeight()*0.8f);
@@ -199,8 +200,23 @@ public class GameView extends View {
                 p.destroy();
             }
         }
-        if(globalCount %30==0){
-            addPlanets(canvas.getWidth()); //add new planet
+        if(globalCount %70==0){
+            Planet p = new Mercury(bitmaps.get(4));
+            Planet q = new Jupiter(bitmaps.get(6));
+            float pW = p.getWidth();
+            float pH = p.getHeight();
+            float x = (float)((canvas.getWidth() - pW)*Math.random());
+            float y = - pH;
+            p.setX(x);
+            p.setY(y);
+            toAddPlanets.add(p);
+            float qW = p.getWidth();
+            float qH = p.getHeight();
+            float qx = (float)((canvas.getWidth() - pW)*Math.random());
+            float qy = - pH;
+            q.setX(qx);
+            q.setY(qy);
+            toAddPlanets.add(q);
         }
         globalCount++;
         //draw all the items
@@ -225,169 +241,45 @@ public class GameView extends View {
     }
 
     private void drawPausing(Canvas canvas){
-        drawScoreAndBombs(canvas);
         for(Planet p : planets){
             p.onDeploy(canvas, paint, this);
         }
         if(spaceShip != null){
             spaceShip.beforeDeploy(canvas, paint, this);
         }
-        drawScoreResults(canvas, "Continue");
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(0xFFD7DDDE);
+        Rect rect1 = new Rect(0, 0, 1000, 300);
+        canvas.drawRect(rect1, paint);
+        textPaint.setTextSize(60);
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText("scores: "+score, 500, 150, textPaint);
+        Rect rect2 = new Rect(250,300,750,600);
+        canvas.drawRect(rect2, paint);
+        canvas.drawText("continue", 500, 450, textPaint);
+        continueRect = new Rect(rect2);
         if(lastSingleClickTime > 0){
             postInvalidate();
         }
     }
 
     private void drawOver(Canvas canvas){
-        drawScoreResults(canvas, "Restart");
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(0xFFD7DDDE);
+        Rect rect1 = new Rect(0, 0, 1000, 300);
+        canvas.drawRect(rect1, paint);
+        textPaint.setTextSize(60);
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText("scores: "+score, 500, 150, textPaint);
+        Rect rect2 = new Rect(250,300,750,600);
+        canvas.drawRect(rect2, paint);
+        canvas.drawText("continue", 500, 450, textPaint);
+        continueRect = new Rect(rect2);
         if(lastSingleClickTime > 0){
             postInvalidate();
         }
     }
 
-    private void drawScoreResults(Canvas canvas, String operation){
-        int cW = canvas.getWidth();
-        int cH = canvas.getHeight();
-//        float originalFontSize = textPaint.getTextSize();
-//        Paint.Align originalFontAlign = textPaint.getTextAlign();
-//        int originalColor = paint.getColor();
-//        Paint.Style originalStyle = paint.getStyle();
-        /*
-        W = 360
-        w1 = 20
-        w2 = 320
-        buttonWidth = 140
-        buttonHeight = 42
-        H = 558
-        h1 = 150
-        h2 = 60
-        h3 = 124
-        h4 = 76
-        */
-        int w1 = (int)(0.1 * cW);
-        int w2 = cW - 2 * w1;
-        int buttonWidth = (int)(0.25 * cW);
-
-        int h1= (int)(0.2 * cH);
-        int h2 = (int)(0.1 * cH);
-        int h3 = (int)(0.2 * cH);
-        int h4 = (int)(0.1 * cH);
-        int buttonHeight = (int)(0.1 * cH);
-
-        canvas.translate(w1, h1);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(0xFFD7DDDE);
-        Rect rect1 = new Rect(0, 0, w2, cH - 2 * h1);
-        canvas.drawRect(rect1, paint);
-        textPaint.setTextSize(30);
-        textPaint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText("final scores: ", w2 / 2, (h2 - 16) / 2 + 16, textPaint);
-
-        String allScore = String.valueOf(caculateScores());
-        canvas.drawText(allScore, w2 / 2, (h3 - 16) / 2 + 16, textPaint);
-
-        Rect rect2 = new Rect();
-        rect2.left = (w2 - buttonWidth) / 2;
-        rect2.right = w2 - rect2.left;
-        rect2.top = (h4 - buttonHeight) / 2;
-        rect2.bottom = h4 - rect2.top;
-        canvas.drawRect(rect2, paint);
-        canvas.translate(0, rect2.top);
-        canvas.drawText(operation, w2 / 2, (buttonHeight - 16) / 2 + 16, textPaint);
-        continueRect = new Rect(rect2);
-        continueRect.left = w1 + rect2.left;
-        continueRect.right = continueRect.left + buttonWidth;
-        continueRect.top = h1 + h2 + h3 + rect2.top;
-        continueRect.bottom = continueRect.top + buttonHeight;
-
-//        textPaint.setTextSize(originalFontSize);
-//        textPaint.setTextAlign(originalFontAlign);
-//        paint.setColor(originalColor);
-//        paint.setStyle(originalStyle);
-
-    }
-
-    private void drawScoreAndBombs(Canvas canvas){
-
-        // try to hide this
-        Bitmap pauseBm = bitmaps.get(9);
-        RectF recF = new RectF();
-        recF.left = 50 * density;
-        recF.top = 50* density;
-        recF.right = recF.left + pauseBm.getWidth();
-        recF.bottom = recF.top + pauseBm.getHeight();
-        float pauseLeft = recF.left;
-        float pauseTop = recF.top;
-        canvas.drawBitmap(pauseBm, pauseLeft, pauseTop, paint);
-        float scoreLeft = pauseLeft + pauseBm.getWidth() + 20 * density;
-        float scoreTop = fontSize + pauseTop + pauseBm.getHeight() / 2 - fontSize / 2;
-        TextPaint scoreText = new TextPaint();
-        scoreText.setTextSize(28);
-        canvas.drawText(score + "", scoreLeft, scoreTop, scoreText);
-
-        //绘制左下角
-        if(spaceShip != null && !spaceShip.isDestroyed()){
-            int num = spaceShip.getNuclearNo();
-            if(num > 0){
-                //绘制左下角的炸弹
-                Bitmap bombBitmap = bitmaps.get(10);
-                float bombTop = canvas.getHeight() - bombBitmap.getHeight();
-                canvas.drawBitmap(bombBitmap, 0, bombTop, paint);
-                //绘制左下角的炸弹数量
-                float bombCountLeft = bombBitmap.getWidth() + 10 * density;
-                float bombCountTop = fontSize + bombTop + bombBitmap.getHeight() / 2 - fontSize / 2;
-                canvas.drawText("X " + num, bombCountLeft, bombCountTop, textPaint);
-            }
-        }
-
-    }
-
-    // when this aircraft is in front of the bullets
-    private void destroyBulletsFront(){
-
-    }
-
-
-    private void addPlanets(int Width){
-        Planet p = null;
-        int speed = 4;
-        //callTime表示createRandomSprites方法被调用的次数
-        int callTime = Math.round(globalCount / 50);
-        if((callTime + 1) % 25 == 0){
-            //发送道具奖品
-            if((callTime + 1) % 50 == 0){
-                p = new LaserCredit(bitmaps.get(8));
-            }
-        }
-        else{
-            //发送敌机
-            int[] nums = {0,0,0,0,0,1,0,0,1,0,0,0,0,1,1,1,1,1,1,0};
-            int index = (int)Math.floor(nums.length*Math.random());
-            int type = nums[index];
-            if(type == 0){
-                p = new Mercury(bitmaps.get(4));
-            }
-            else {
-                p = new Jupiter(bitmaps.get(6));
-                speed=2;
-            }
-
-        }
-
-        if(p != null){
-            float pW = p.getWidth();
-            float pH = p.getHeight();
-            float x = (float)((Width - pW)*Math.random());
-            float y = - pH;
-            p.setX(x);
-            p.setY(y);
-            if(p instanceof NewStar){
-                NewStar nStar = (NewStar) p;
-                nStar.setSpeed(speed);
-            }
-            toAddPlanets.add(p);
-        }
-    }
 
     // deal with all touches actions
     public boolean onTouchEvent(MotionEvent event){
@@ -423,11 +315,8 @@ public class GameView extends View {
                     spaceShip.centerTo(tX, tY);
                 }
             }else if(tType == 3){
-                if(status == 1){
-                    if(spaceShip != null){
-                        spaceShip.laser(this);
-                    }
-                }
+                status=2;
+                postInvalidate();
             }
         }else if(status == 2){
             if(lastSingleClickTime > 0){
@@ -439,10 +328,7 @@ public class GameView extends View {
             }
         }
         return true;
-
     }
-
-
 
     ///////////////////////////////
 
@@ -479,13 +365,6 @@ public class GameView extends View {
         return density;
     }
 
-    public int getState(){
-        return status;
-    }
-
-    public float getResult(){
-        return 0f;
-    }
 
     public Bitmap getYellowBulletBitmap(){
         return bitmaps.get(2);
