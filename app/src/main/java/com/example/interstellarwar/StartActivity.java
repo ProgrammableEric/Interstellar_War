@@ -35,8 +35,7 @@ public class StartActivity extends AppCompatActivity {
                 R.drawable.jupiter,
                 R.drawable.bomb_award,
                 R.drawable.bullet_award,
-                R.drawable.pause1,
-                R.drawable.pause2,
+                R.drawable.pause,
                 R.drawable.bomb
         };
         gameView.startSeting(bitmapIds);
