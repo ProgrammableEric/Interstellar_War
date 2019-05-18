@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.TestLooperManager;
-import android.preference.Preference;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,18 +33,18 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
 
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("username","");
-        editor.commit();
+//        SharedPreferences.Editor editor = sp.edit();
+//        editor.putString("username", "");
+//        editor.commit();
 
         String username = sp.getString("username", "");
 
-        if (username == "") {
-            Toast toast = Toast.makeText(getApplicationContext(), "no user name", Toast.LENGTH_LONG);
+        if (username.isEmpty()) {
+            Toast toast = Toast.makeText(getApplicationContext(), "no user name", Toast.LENGTH_SHORT);
             toast.show();
             showInputDialog();
         } else {
-            Toast toast = Toast.makeText(getApplicationContext(), "login succeed", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(getApplicationContext(), "login succeed", Toast.LENGTH_SHORT);
             toast.show();
             username = sp.getString("username", "");
             tv = (TextView) findViewById(R.id.textView2);
@@ -66,52 +64,59 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         final String username = editText.getText().toString();
 
-                        BmobQuery<GameScore> query = new BmobQuery<GameScore>();
-                        query.addWhereEqualTo("playerName", username);
-                        query.setLimit(1);
-                        query.findObjects(new FindListener<GameScore>() {
-                            @Override
-                            public void done(List<GameScore> list, BmobException e) {
-                                if (e == null) {
-                                    if (list.isEmpty()) {
+                        if (username.isEmpty()) {
+                            Toast toast = Toast.makeText(getApplicationContext(), "Can not enter empty name!", Toast.LENGTH_SHORT);
+                            toast.show();
+                            showInputDialog();
+                        } else {
 
-                                        GameScore gs = new GameScore();
-                                        gs.setPlayerName(username);
-                                        gs.setScore(0);
-                                        String userid = gs.getObjectId();
-                                        gs.save(new SaveListener<String>() {
-                                            @Override
-                                            public void done(String objectid, BmobException e) {
-                                                if(e == null) {
-                                                    Toast toast = Toast.makeText(getApplicationContext(), "Create User success："+ username, Toast.LENGTH_LONG);
-                                                    toast.show();
-                                                } else {
-                                                    Log.i("bmob","fail："+e.getMessage()+","+e.getErrorCode());
+                            BmobQuery<GameScore> query = new BmobQuery<GameScore>();
+                            query.addWhereEqualTo("playerName", username);
+                            query.setLimit(1);
+                            query.findObjects(new FindListener<GameScore>() {
+                                @Override
+                                public void done(List<GameScore> list, BmobException e) {
+                                    if (e == null) {
+                                        if (list.isEmpty()) {
+
+                                            GameScore gs = new GameScore();
+                                            gs.setPlayerName(username);
+                                            gs.setScore(0);
+                                            String userid = gs.getObjectId();
+                                            gs.save(new SaveListener<String>() {
+                                                @Override
+                                                public void done(String objectid, BmobException e) {
+                                                    if (e == null) {
+                                                        Toast toast = Toast.makeText(getApplicationContext(), "Create User success：" + username, Toast.LENGTH_SHORT);
+                                                        toast.show();
+                                                    } else {
+                                                        Log.i("bmob", "fail：" + e.getMessage() + "," + e.getErrorCode());
+                                                    }
                                                 }
-                                            }
-                                        });
+                                            });
 
-                                        SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = sp.edit();
-                                        editor.putString("username",username);
-                                        editor.putString("score","0");
-                                        editor.putString("userid",userid);
-                                        editor.commit();
-                                        tv = (TextView) findViewById(R.id.textView2);
-                                        tv.setText(username);
-                                        tv.setGravity(Gravity.CENTER);
+                                            SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = sp.edit();
+                                            editor.putString("username", username);
+                                            editor.putString("score", "0");
+                                            editor.putString("userid", userid);
+                                            editor.commit();
+                                            tv = (TextView) findViewById(R.id.textView2);
+                                            tv.setText(username);
+                                            tv.setGravity(Gravity.CENTER);
 
+                                        } else {
+                                            Toast.makeText(MainActivity.this,
+                                                    "This username already exists",
+                                                    Toast.LENGTH_LONG).show();
+                                            showInputDialog();
+                                        }
                                     } else {
-                                        Toast.makeText(MainActivity.this,
-                                                "This username already exists",
-                                                Toast.LENGTH_LONG).show();
-                                        showInputDialog();
+                                        Log.i("bmob", "fail：" + e.getMessage() + "," + e.getErrorCode());
                                     }
-                                } else {
-                                    Log.i("bmob","fail："+e.getMessage()+","+e.getErrorCode());
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }).show();
     }

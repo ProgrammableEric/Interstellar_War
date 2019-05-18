@@ -22,7 +22,7 @@
             android:name="cn.bmob.v3.util.BmobContentProvider"
             android:authorities="com.example.interstellarwar.BmobContentProvider"></provider>
 
-        <activity android:name=".StartActivity" />
+        <activity android:name=".StartActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
