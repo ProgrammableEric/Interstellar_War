@@ -169,12 +169,12 @@ public class SpaceShip extends Planet {
         if(!collide){
             collide = true;
             setVisibility(false);
-            float centerX = getX() + getWidth() / 2;
-            float centerY = getY() + getHeight() / 2;
-            Bombing bombing = new Bombing(gameView.getExplosionBitmap());
-            bombing.centerTo(centerX, centerY);
-            gameView.addPlanet(bombing);
-            beginFlashFrame = getTimes() + bombing.getTime();
+//            float centerX = getX() + getWidth() / 2;
+//            float centerY = getY() + getHeight() / 2;
+//            Bombing bombing = new Bombing(gameView.getExplosionBitmap());
+//            bombing.centerTo(centerX, centerY);
+//            gameView.addPlanet(bombing);
+            beginFlashFrame = getTimes();
         }
     }
 
