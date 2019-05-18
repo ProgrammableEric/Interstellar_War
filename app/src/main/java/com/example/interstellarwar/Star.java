@@ -12,6 +12,7 @@ import android.graphics.RectF;
 public class Star extends Planet {
 
     private float speed = 2; // the pixel number of each movement, go down for positive
+    private boolean right = true;
 
     public Star(Bitmap bm){
         super(bm);
@@ -30,7 +31,27 @@ public class Star extends Planet {
     //// move speed along the y axis
     protected void beforeDeploy(Canvas canvas, Paint paint, GameView gameView) {
         if(!isDestroyed()){
-            move(0, speed * gameView.getDensity());
+            if(this instanceof Laser){
+                move(0, speed * gameView.getDensity());
+            }
+            RectF spriteRecF = getPlanet();
+            if(spriteRecF.right>=canvas.getWidth()){
+                right=false;
+            }
+            if(spriteRecF.left<=0){
+                right=true;
+            }
+            if(right){
+                move(3, speed * gameView.getDensity());
+            }else{
+                move(-3, speed * gameView.getDensity());
+            }
+
+//            if(index%2==0){
+//                move(-15, speed * gameView.getDensity());
+//            }else{
+//                move(15, speed * gameView.getDensity());
+//            }
         }
     }
 
