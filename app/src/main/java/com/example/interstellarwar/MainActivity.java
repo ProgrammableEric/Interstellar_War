@@ -28,9 +28,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick2(View v) {
-        GameScore gs = new GameScore();
-        gs.setPlayerName("LeoNo1");
-        gs.setScore(9999999);
+//        GameScore gs = new GameScore();
+//        gs.setPlayerName("LeoNo1");
+//        gs.setScore(9999999);
 //        gs.save(new SaveListener<String>() {
 //            @Override
 //            public void done(String s, BmobException e) {
