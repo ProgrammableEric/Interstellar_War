@@ -132,7 +132,7 @@ public class SpaceShip extends Planet {
                     setVisibility(!visible);
                     flashTime++;
                     if(flashTime >= maxFlashTime){
-                        // if the flash time superior max falsh time, then destroy spaceship
+                        // if the flash time superior max flash time, then destroy spaceship
                         destroy();
                     }
                 }

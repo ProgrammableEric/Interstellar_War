@@ -28,8 +28,8 @@ public class StartActivity extends AppCompatActivity {
         int[] bitmapIds = {
                 R.drawable.spaceship,
                 R.drawable.explosion,
-                R.drawable.yellow_bullet,
-                R.drawable.blue_bullet,
+                R.drawable.laser,
+                R.drawable.laser,
                 R.drawable.mercury,
                 R.drawable.mars,
                 R.drawable.jupiter,

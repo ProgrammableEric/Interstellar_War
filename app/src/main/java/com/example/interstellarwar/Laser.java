@@ -6,6 +6,6 @@ public class Laser extends Star {
 
     public Laser(Bitmap bm){
         super(bm);
-        setSpeed(-10); // negative means go up
+        setSpeed(-5); // negative means go up
     }
 }
