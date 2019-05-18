@@ -30,7 +30,7 @@ public class Star extends Planet {
     //// move speed along the y axis
     protected void beforeDeploy(Canvas canvas, Paint paint, GameView gameView) {
         if(!isDestroyed()){
-            move(0, speed * gameView.getResult());
+            move(0, speed * gameView.getDensity());
         }
     }
 

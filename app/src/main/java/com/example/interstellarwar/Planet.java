@@ -167,7 +167,7 @@ public class Planet {
         destroyed = true;
     }
 
-    // Planet is detroyed
+    // Planet is destroyed
     public boolean isDestroyed(){
         return destroyed;
     }
