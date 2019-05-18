@@ -13,13 +13,13 @@ public class StartActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_start);
         gameView = findViewById(R.id.gameView);
-        //0:combatAircraft
+        //0:spaceship
         //1:explosion
         //2:yellowBullet
         //3:blueBullet
-        //4:smallEnemyPlane
-        //5:middleEnemyPlane
-        //6:bigEnemyPlane
+        //4:mercury
+        //5:mars
+        //6:jupiter
         //7:bombAward
         //8:bulletAward
         //9:pause1
