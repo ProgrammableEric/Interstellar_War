@@ -66,7 +66,7 @@ public class NewStar extends Star {
         bombing.centerTo(centerX, centerY);
         gameView.addPlanet(bombing);
 
-        // after bombing, add grades to GameView and detroy star
+        // after bombing, add grades to GameView and destroy star
         gameView.changeScore(grade);
         destroy();
     }
