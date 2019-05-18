@@ -13,6 +13,7 @@ public class Star extends Planet {
 
     private float speed = 2; // the pixel number of each movement, go down for positive
     private boolean right = true;
+    private boolean left = true;
     private static int total = 0;
     private int num = 0;
 
@@ -55,12 +56,12 @@ public class Star extends Planet {
                 }else{
                     RectF planetRecF = getPlanet();
                     if(planetRecF.right>=canvas.getWidth()){
-                        right=false;
-                    }
-                    if(planetRecF.left<=0){
                         right=true;
                     }
-                    if(right){
+                    if(planetRecF.left<=0){
+                        left=false;
+                    }
+                    if(left){
                         move(-3, speed * gameView.getDensity());
                     }else{
                         move(3, speed * gameView.getDensity());
