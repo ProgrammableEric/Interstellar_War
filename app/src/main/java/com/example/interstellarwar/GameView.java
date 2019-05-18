@@ -20,14 +20,12 @@ import java.util.List;
 public class GameView extends View {
 
     //set class field
-    private Paint paint;
-    private TextPaint textPaint;
+    private Paint paint = new Paint();
+    private TextPaint textPaint = new TextPaint();
     private SpaceShip spaceShip = null;
-
     // initial the planets and to add planets
     private List<Planet> planets = new ArrayList<Planet>();
     private List<Planet> toAddPlanets = new ArrayList<Planet>();
-
     //0:spaceship
     //1:bombing
     //2:laser
@@ -75,15 +73,9 @@ public class GameView extends View {
 
     }
 
-    private void beginView(AttributeSet attribs, int style){
-        final TypedArray a = getContext().obtainStyledAttributes(attribs, R.styleable.GameView, style, 0);
+    private void beginView(AttributeSet attrs, int style){
+        final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.GameView, style, 0);
         a.recycle();
-        // initial setting appearance
-        paint = new Paint();
-        textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.ANTI_ALIAS_FLAG);
-        fontSize = textPaint.getTextSize();
-        textPaint.setTextSize(15);
-
     }
 
     public void startSeting(int[] bmIds){
@@ -189,19 +181,16 @@ public class GameView extends View {
     }
 
     private void drawGaming(Canvas canvas){
-        //drawScoreAndBombs(canvas);
+        drawScoreAndBombs(canvas);
         //locate spaceship at center of the bottom of canvas
         if(globalCount == 0){
-            spaceShip.centerTo(canvas.getWidth() / 2, canvas.getHeight() - spaceShip.getHeight() / 2);
+            spaceShip.centerTo(canvas.getWidth()*0.2f, canvas.getHeight()*0.8f);
         }
         // add toadd planets
         if(toAddPlanets.size() > 0){
             planets.addAll(toAddPlanets);
             toAddPlanets.clear();
         }
-
-        //检查战斗机跑到子弹前面的情况
-//        destroyBulletsFrontOfCombatAircraft();
 
         Iterator<Planet> iterator = planets.iterator();
         while (iterator.hasNext()){
@@ -236,7 +225,7 @@ public class GameView extends View {
     }
 
     private void drawPausing(Canvas canvas){
-        //drawScoreAndBombs(canvas);
+        drawScoreAndBombs(canvas);
         for(Planet p : planets){
             p.onDeploy(canvas, paint, this);
         }
@@ -275,7 +264,7 @@ public class GameView extends View {
         h3 = 124
         h4 = 76
         */
-        int w1 = (int)(0.05 * cW);
+        int w1 = (int)(0.1 * cW);
         int w2 = cW - 2 * w1;
         int buttonWidth = (int)(0.25 * cW);
 
@@ -290,7 +279,7 @@ public class GameView extends View {
         paint.setColor(0xFFD7DDDE);
         Rect rect1 = new Rect(0, 0, w2, cH - 2 * h1);
         canvas.drawRect(rect1, paint);
-        textPaint.setTextSize(16);
+        textPaint.setTextSize(30);
         textPaint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText("final scores: ", w2 / 2, (h2 - 16) / 2 + 16, textPaint);
 
@@ -321,15 +310,10 @@ public class GameView extends View {
     private void drawScoreAndBombs(Canvas canvas){
 
         // try to hide this
-        Bitmap pauseBm;
-        if(status==1){
-            pauseBm = bitmaps.get(9);
-        }else{
-            pauseBm = bitmaps.get(10);
-        }
+        Bitmap pauseBm = bitmaps.get(9);
         RectF recF = new RectF();
-        recF.left = 15 * density;
-        recF.top = 15 * density;
+        recF.left = 50 * density;
+        recF.top = 50* density;
         recF.right = recF.left + pauseBm.getWidth();
         recF.bottom = recF.top + pauseBm.getHeight();
         float pauseLeft = recF.left;
@@ -337,14 +321,16 @@ public class GameView extends View {
         canvas.drawBitmap(pauseBm, pauseLeft, pauseTop, paint);
         float scoreLeft = pauseLeft + pauseBm.getWidth() + 20 * density;
         float scoreTop = fontSize + pauseTop + pauseBm.getHeight() / 2 - fontSize / 2;
-        canvas.drawText(score + "", scoreLeft, scoreTop, textPaint);
+        TextPaint scoreText = new TextPaint();
+        scoreText.setTextSize(28);
+        canvas.drawText(score + "", scoreLeft, scoreTop, scoreText);
 
         //绘制左下角
         if(spaceShip != null && !spaceShip.isDestroyed()){
             int num = spaceShip.getNuclearNo();
             if(num > 0){
                 //绘制左下角的炸弹
-                Bitmap bombBitmap = bitmaps.get(11);
+                Bitmap bombBitmap = bitmaps.get(10);
                 float bombTop = canvas.getHeight() - bombBitmap.getHeight();
                 canvas.drawBitmap(bombBitmap, 0, bombTop, paint);
                 //绘制左下角的炸弹数量
@@ -425,8 +411,10 @@ public class GameView extends View {
                         tType = 3;
                         lastSingleClickTime = -1;
                         tUpTime = -1;
-                    }}break;
-            default:lastSingleClickTime = tUpTime;break;
+                    }else{
+                        lastSingleClickTime = tUpTime;
+                    }
+                }break;
         }
         // start:1   pause:2   over:3  destroy:4
         if(status == 1){
