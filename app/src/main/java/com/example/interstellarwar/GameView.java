@@ -233,22 +233,26 @@ public class GameView extends View {
             }
         }
         if(globalCount %70==0){
-            Planet p = new Mercury(bitmaps.get(4));
-            Planet q = new Jupiter(bitmaps.get(6));
-            float pW = p.getWidth();
-            float pH = p.getHeight();
-            float x = (float)((canvas.getWidth() - pW)*Math.random());
-            float y = - pH;
-            p.setX(x);
-            p.setY(y);
-            toAddPlanets.add(p);
-            float qW = p.getWidth();
-            float qH = p.getHeight();
-            float qx = (float)((canvas.getWidth() - qW)*Math.random());
-            float qy = - qH;
-            q.setX(qx);
-            q.setY(qy);
-            toAddPlanets.add(q);
+            int index = (int)Math.floor(100*Math.random());
+            if(index%2==0){
+                Planet p = new Mercury(bitmaps.get(4));
+                float pW = p.getWidth();
+                float pH = p.getHeight();
+                float x = (float)((canvas.getWidth() - pW)*Math.random());
+                float y = - pH;
+                p.setX(x);
+                p.setY(y);
+                toAddPlanets.add(p);
+            }else{
+                Planet q = new Jupiter(bitmaps.get(6));
+                float qW = q.getWidth();
+                float qH = q.getHeight();
+                float qx = (float)((canvas.getWidth() - qW)*Math.random());
+                float qy = - qH;
+                q.setX(qx);
+                q.setY(qy);
+                toAddPlanets.add(q);
+            }
         }
         globalCount++;
         //draw all the items
