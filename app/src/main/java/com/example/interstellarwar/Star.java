@@ -28,17 +28,17 @@ public class Star extends Planet {
 
     @Override
 
-    //// move speed along the y axis
+    // laser move speed along the y axis
     protected void beforeDeploy(Canvas canvas, Paint paint, GameView gameView) {
         if(!isDestroyed()){
             if(this instanceof Laser){
                 move(0, speed * gameView.getDensity());
             }
-            RectF spriteRecF = getPlanet();
-            if(spriteRecF.right>=canvas.getWidth()){
+            RectF planetRecF = getPlanet();
+            if(planetRecF.right>=canvas.getWidth()){
                 right=false;
             }
-            if(spriteRecF.left<=0){
+            if(planetRecF.left<=0){
                 right=true;
             }
             if(right){
@@ -59,8 +59,8 @@ public class Star extends Planet {
     protected void finishDeploy(Canvas canvas, Paint paint, GameView gameView){
         if(!isDestroyed()){
             RectF canvasRecF = new RectF(0, 0, canvas.getWidth(), canvas.getHeight());
-            RectF spriteRecF = getPlanet();
-            if(!RectF.intersects(canvasRecF, spriteRecF)){
+            RectF planetRecF = getPlanet();
+            if(!RectF.intersects(canvasRecF, planetRecF)){
                 destroy();
             }
         }
