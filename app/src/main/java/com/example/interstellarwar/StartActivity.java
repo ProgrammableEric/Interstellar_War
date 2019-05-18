@@ -3,6 +3,8 @@ package com.example.interstellarwar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import cn.bmob.v3.Bmob;
+
 public class StartActivity extends AppCompatActivity {
 
     private GameView gameView;
@@ -10,6 +12,7 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_start);
         gameView = findViewById(R.id.gameView);
         //0:combatAircraft
