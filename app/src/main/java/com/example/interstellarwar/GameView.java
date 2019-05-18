@@ -20,8 +20,6 @@ import java.util.List;
 public class GameView extends View {
 
     //set class field
-    private Paint paint = new Paint();
-    private TextPaint textPaint = new TextPaint();
     private SpaceShip spaceShip = null;
     // initial the planets and to add planets
     private List<Planet> planets = new ArrayList<Planet>();
@@ -36,6 +34,8 @@ public class GameView extends View {
     //9:pause
     //11:nuclear
     private List<Bitmap> bitmaps = new ArrayList<Bitmap>();
+    private Paint paint = new Paint();
+    private TextPaint textPaint = new TextPaint();
     private float density = getResources().getDisplayMetrics().density;
     // start=1  pause=2  over=3  destroyed=4
     private int status = 4;
@@ -169,9 +169,41 @@ public class GameView extends View {
         if(status == 1){
             drawGaming(canvas);
         }else if(status == 2){
-            drawPausing(canvas);
+            for(Planet p : planets){
+                p.onDeploy(canvas, paint, this);
+            }
+            if(spaceShip != null){
+                spaceShip.beforeDeploy(canvas, paint, this);
+            }
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(0xFFD7DDDE);
+            Rect rect1 = new Rect(0, 0, 1000, 300);
+            canvas.drawRect(rect1, paint);
+            textPaint.setTextSize(60);
+            textPaint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawText("scores: "+score, 500, 150, textPaint);
+            Rect rect2 = new Rect(250,300,750,600);
+            canvas.drawRect(rect2, paint);
+            canvas.drawText("continue", 500, 450, textPaint);
+            continueRect = new Rect(rect2);
+            if(lastSingleClickTime > 0){
+                postInvalidate();
+            }
         }else if(status == 3){
-            drawOver(canvas);
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(0xFFD7DDDE);
+            Rect rect1 = new Rect(0, 0, 1000, 300);
+            canvas.drawRect(rect1, paint);
+            textPaint.setTextSize(60);
+            textPaint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawText("scores: "+score, 500, 150, textPaint);
+            Rect rect2 = new Rect(250,300,750,600);
+            canvas.drawRect(rect2, paint);
+            canvas.drawText("continue", 500, 450, textPaint);
+            continueRect = new Rect(rect2);
+            if(lastSingleClickTime > 0){
+                postInvalidate();
+            }
         }
     }
 
@@ -212,8 +244,8 @@ public class GameView extends View {
             toAddPlanets.add(p);
             float qW = p.getWidth();
             float qH = p.getHeight();
-            float qx = (float)((canvas.getWidth() - pW)*Math.random());
-            float qy = - pH;
+            float qx = (float)((canvas.getWidth() - qW)*Math.random());
+            float qy = - qH;
             q.setX(qx);
             q.setY(qy);
             toAddPlanets.add(q);
@@ -240,45 +272,6 @@ public class GameView extends View {
 
     }
 
-    private void drawPausing(Canvas canvas){
-        for(Planet p : planets){
-            p.onDeploy(canvas, paint, this);
-        }
-        if(spaceShip != null){
-            spaceShip.beforeDeploy(canvas, paint, this);
-        }
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(0xFFD7DDDE);
-        Rect rect1 = new Rect(0, 0, 1000, 300);
-        canvas.drawRect(rect1, paint);
-        textPaint.setTextSize(60);
-        textPaint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText("scores: "+score, 500, 150, textPaint);
-        Rect rect2 = new Rect(250,300,750,600);
-        canvas.drawRect(rect2, paint);
-        canvas.drawText("continue", 500, 450, textPaint);
-        continueRect = new Rect(rect2);
-        if(lastSingleClickTime > 0){
-            postInvalidate();
-        }
-    }
-
-    private void drawOver(Canvas canvas){
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(0xFFD7DDDE);
-        Rect rect1 = new Rect(0, 0, 1000, 300);
-        canvas.drawRect(rect1, paint);
-        textPaint.setTextSize(60);
-        textPaint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText("scores: "+score, 500, 150, textPaint);
-        Rect rect2 = new Rect(250,300,750,600);
-        canvas.drawRect(rect2, paint);
-        canvas.drawText("continue", 500, 450, textPaint);
-        continueRect = new Rect(rect2);
-        if(lastSingleClickTime > 0){
-            postInvalidate();
-        }
-    }
 
 
     // deal with all touches actions
