@@ -1,7 +1,7 @@
 package com.example.interstellarwar;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -10,35 +10,35 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_start);
-        gameView = (GameView)findViewById(R.id.gameView);
-        //0:combatAircraft
+        gameView = findViewById(R.id.gameView);
+        //0:spaceship
         //1:explosion
         //2:yellowBullet
         //3:blueBullet
-        //4:smallEnemyPlane
-        //5:middleEnemyPlane
-        //6:bigEnemyPlane
+        //4:mercury
+        //5:mars
+        //6:jupiter
         //7:bombAward
         //8:bulletAward
         //9:pause1
         //10:pause2
         //11:bomb
         int[] bitmapIds = {
-                R.drawable.plane,
+                R.drawable.spaceship,
                 R.drawable.explosion,
-                R.drawable.yellow_bullet,
-                R.drawable.blue_bullet,
-                R.drawable.small,
-                R.drawable.middle,
-                R.drawable.big,
+                R.drawable.laser,
+                R.drawable.laser,
+                R.drawable.mercury,
+                R.drawable.mars,
+                R.drawable.jupiter,
                 R.drawable.bomb_award,
                 R.drawable.bullet_award,
-                R.drawable.pause1,
-                R.drawable.pause2,
+                R.drawable.pause,
                 R.drawable.bomb
         };
-        gameView.startSeting(bitmapIds);
+        gameView.startSetting(bitmapIds);
     }
 
     @Override

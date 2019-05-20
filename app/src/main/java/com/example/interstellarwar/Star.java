@@ -3,45 +3,62 @@ package com.example.interstellarwar;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.RectF;
+import android.graphics.Point;
 
-/**
- * Planets that can be move straightly
- */
+import java.util.List;
 
 public class Star extends Planet {
+    private int resistance;//how the planet is resistant
+    private int grade;// how many grades can get after destroying one planet
 
-    private float speed = 2; // the pixel number of each movement, go down for positive
-
-    public Star(Bitmap bm){
+    public Star(Bitmap bm) {
         super(bm);
     }
 
-    public void setSpeed(float speed){
-        this.speed = speed;
+    public void setResistance(int res) {
+        this.resistance = res;
     }
 
-    public float getSpeed(){
-        return speed;
+    public int getResistance(){
+        return resistance;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public int getGrade(){
+        return grade;
     }
 
     @Override
+    protected void finishDeploy(Canvas canvas, Paint paint, GameView gameView){
+        super.finishDeploy(canvas, paint, gameView);
 
-    //// move speed along the y axis
-    protected void beforeDeploy(Canvas canvas, Paint paint, GameView gameView) {
+        // check if was shot after deploying
         if(!isDestroyed()){
-            move(0, speed * gameView.getResult());
+            // check if was shot after star was deployed
+            List<Laser> lasers = gameView.getLasers();
+            for(Laser laser : lasers){
+                // check if star hit laser
+                Point p = getCollidedBitmapPos(laser);
+                if(p != null){
+                    // if has intersection, laser hit star
+                    laser.destroy();
+                    resistance--;
+                    if(resistance <= 0){
+                        // no resistance, implement bomb
+                        bomb(gameView);
+                        return;
+                    }
+                }
+            }
         }
     }
 
-    //check if planet exceeds the range of Canvas, if yes, then destroy planet
-    protected void finishDeploy(Canvas canvas, Paint paint, GameView gameView){
-        if(!isDestroyed()){
-            RectF canvasRecF = new RectF(0, 0, canvas.getWidth(), canvas.getHeight());
-            RectF spriteRecF = getPlanet();
-            if(!RectF.intersects(canvasRecF, spriteRecF)){
-                destroy();
-            }
-        }
+
+    public void bomb(GameView gameView){
+        gameView.changeScore(grade);
+        destroy();
     }
 }
