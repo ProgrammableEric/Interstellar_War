@@ -38,7 +38,7 @@ public class StartActivity extends AppCompatActivity {
                 R.drawable.pause,
                 R.drawable.bomb
         };
-        gameView.startSeting(bitmapIds);
+        gameView.startSetting(bitmapIds);
     }
 
     @Override

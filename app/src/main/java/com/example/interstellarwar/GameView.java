@@ -72,7 +72,7 @@ public class GameView extends View {
         a.recycle();
     }
 
-    public void startSeting(int[] bmIds){
+    public void startSetting(int[] bmIds){
         remove();
         for(int Id : bmIds){
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), Id);
@@ -91,11 +91,11 @@ public class GameView extends View {
         status = 2;
     }
 
-    public List<NewStar> getStars(){
-        List<NewStar> planetList = new ArrayList<NewStar>();
+    public List<Star> getStars(){
+        List<Star> planetList = new ArrayList<Star>();
         for(Planet p : planets){
-            if(!p.isDestroyed() && p instanceof NewStar){
-                NewStar s = (NewStar) p;
+            if(!p.isDestroyed() && p instanceof Star){
+                Star s = (Star) p;
                 planetList.add(s);
             }
         }
@@ -273,7 +273,6 @@ public class GameView extends View {
         }
 
     }
-
 
 
     // deal with all touches actions
