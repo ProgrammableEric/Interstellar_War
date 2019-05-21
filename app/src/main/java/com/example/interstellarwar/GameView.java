@@ -36,7 +36,6 @@ public class GameView extends View {
     private List<Bitmap> bitmaps = new ArrayList<Bitmap>();
     private Paint paint = new Paint();
     private TextPaint textPaint = new TextPaint();
-    private float density = getResources().getDisplayMetrics().density;
     // start=1  pause=2  over=3  destroyed=4
     private int status = 4;
     private long globalCount = 0;
@@ -73,7 +72,7 @@ public class GameView extends View {
         a.recycle();
     }
 
-    public void startSeting(int[] bmIds){
+    public void startSetting(int[] bmIds){
         remove();
         for(int Id : bmIds){
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), Id);
@@ -84,35 +83,34 @@ public class GameView extends View {
         postInvalidate();
     }
 
-
-    private void restart(){
-        status = 4;
-        globalCount = 0;
-        score = 0;
-        if(spaceShip != null){
-            spaceShip.destroy();
-        }
-        spaceShip = null;
-        for(Planet p : planets){
-            p.destroy();
-        }
-        planets.clear();
-        spaceShip = new SpaceShip(bitmaps.get(0));
-        status = 1;
-        postInvalidate();
+    public float getDensity(){
+        return getResources().getDisplayMetrics().density;
     }
 
     public void pause(){
         status = 2;
     }
 
-    private void setGameState(){
-        status = 1;
-        postInvalidate();
+    public List<Star> getStars(){
+        List<Star> planetList = new ArrayList<Star>();
+        for(Planet p : planets){
+            if(!p.isDestroyed() && p instanceof Star){
+                Star s = (Star) p;
+                planetList.add(s);
+            }
+        }
+        return planetList;
     }
 
-    private long caculateScores(){
-        return score;
+    public List<Laser> getLasers(){
+        List<Laser> ll = new ArrayList<Laser>();
+        for(Planet p : planets){
+            if(!p.isDestroyed() && p instanceof Laser){
+                Laser l = (Laser) p;
+                ll.add(l);
+            }
+        }
+        return ll;
     }
 
 
@@ -269,13 +267,12 @@ public class GameView extends View {
         if(spaceShip != null){
             spaceShip.Deploy(canvas, paint, this);
             if(spaceShip.isDestroyed()){
-                status = 4;
+                status = 3;
             }
             postInvalidate();
         }
 
     }
-
 
 
     // deal with all touches actions
@@ -327,7 +324,6 @@ public class GameView extends View {
         return true;
     }
 
-    ///////////////////////////////
 
     public void remove(){
         status = 4;
@@ -358,51 +354,9 @@ public class GameView extends View {
         score += grade;
     }
 
-    public float getDensity(){
-        return density;
-    }
 
-
-    public Bitmap getYellowBulletBitmap(){
+    public Bitmap getLaserBitmap(){
         return bitmaps.get(2);
-    }
-
-    public Bitmap getBlueBulletBitmap(){
-        return bitmaps.get(3);
-    }
-
-    public Bitmap getExplosionBitmap(){
-        return bitmaps.get(1);
-    }
-
-    public List<NewStar> getAliveEnemyPlanes(){
-        List<NewStar> planetList = new ArrayList<NewStar>();
-        for(Planet p : planets){
-            if(!p.isDestroyed() && p instanceof NewStar){
-                NewStar s = (NewStar) p;
-                planetList.add(s);
-            }
-        }
-        return planetList;
-    }
-
-    public List<NuclearCredit> getAliveBombAwards(){
-        return null;
-    }
-
-    public List<LaserCredit> getAliveBulletAwards(){
-        return null;
-    }
-
-    public List<Laser> getAliveBullets(){
-        List<Laser> ll = new ArrayList<Laser>();
-        for(Planet p : planets){
-            if(!p.isDestroyed() && p instanceof Laser){
-                Laser l = (Laser) p;
-                ll.add(l);
-            }
-        }
-        return ll;
     }
 
 
