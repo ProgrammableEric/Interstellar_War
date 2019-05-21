@@ -1,6 +1,9 @@
 package com.example.interstellarwar;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.provider.Settings;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -39,7 +43,8 @@ public class GameView extends View {
     // start=1  pause=2  over=3  destroyed=4
     private int status = 4;
     private long globalCount = 0;
-    private long score = 0;
+    private Integer score = 0;
+    private Integer highestscore = 0;
     private float fontSize = 12;
     private float fontSize2 = 20;
     private float borderSize = 2;
@@ -188,20 +193,38 @@ public class GameView extends View {
                 postInvalidate();
             }
         }else if(status == 3){
-            paint.setStyle(Paint.Style.FILL);
-            paint.setColor(0xFFD7DDDE);
-            Rect rect1 = new Rect(0, 0, 1000, 300);
-            canvas.drawRect(rect1, paint);
-            textPaint.setTextSize(60);
-            textPaint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText("scores: "+score, 500, 150, textPaint);
-            Rect rect2 = new Rect(250,300,750,600);
-            canvas.drawRect(rect2, paint);
-            canvas.drawText("continue", 500, 450, textPaint);
-            continueRect = new Rect(rect2);
-            if(lastSingleClickTime > 0){
-                postInvalidate();
+            if (highestscore < score) {
+                highestscore = score;
             }
+            new AlertDialog.Builder(getContext()).setTitle("Scores: "+ score).setMessage(
+                    "The game is over ！").setNegativeButton("Restart", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    postInvalidate();
+                }
+            }).setPositiveButton("Quit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(getContext(), ScoresActivity.class);
+                    intent.putExtra("Score", highestscore);
+                    getContext().startActivity(intent);
+                }
+            }).show();
+
+//            paint.setStyle(Paint.Style.FILL);
+//            paint.setColor(0xFFD7DDDE);
+//            Rect rect1 = new Rect(0, 0, 1000, 300);
+//            canvas.drawRect(rect1, paint);
+//            textPaint.setTextSize(60);
+//            textPaint.setTextAlign(Paint.Align.CENTER);
+//            canvas.drawText("scores: "+score, 500, 150, textPaint);
+//            Rect rect2 = new Rect(250,300,750,600);
+//            canvas.drawRect(rect2, paint);
+//            canvas.drawText("continue", 500, 450, textPaint);
+//            continueRect = new Rect(rect2);
+//            if(lastSingleClickTime > 0){
+//                postInvalidate();
+//            }
         }
     }
 

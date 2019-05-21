@@ -33,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
 
+//        SharedPreferences.Editor editor = sp.edit();
+//        editor.putString("username", "");
+//        editor.putString("score", "0");
+//        editor.putString("userid", "");
+//        editor.commit();
+
         String username = sp.getString("username", "");
 
         if (username.isEmpty()) {
@@ -40,9 +46,8 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
             showInputDialog();
         } else {
-            Toast toast = Toast.makeText(getApplicationContext(), "login succeed", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getApplicationContext(), "Hi!, "+ username+" login succeed", Toast.LENGTH_SHORT);
             toast.show();
-            username = sp.getString("username", "");
             tv = (TextView) findViewById(R.id.textView2);
             tv.setText(username);
             tv.setGravity(Gravity.CENTER);
@@ -78,12 +83,19 @@ public class MainActivity extends AppCompatActivity {
                                             GameScore gs = new GameScore();
                                             gs.setPlayerName(username);
                                             gs.setScore(0);
-                                            String userid = gs.getObjectId();
+                                            //String userid = gs.getObjectId();
                                             gs.save(new SaveListener<String>() {
                                                 @Override
                                                 public void done(String objectid, BmobException e) {
                                                     if (e == null) {
-                                                        Toast toast = Toast.makeText(getApplicationContext(), "Create User success：" + username, Toast.LENGTH_SHORT);
+
+                                                        SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+                                                        SharedPreferences.Editor editor = sp.edit();
+                                                        editor.putString("username", username);
+                                                        editor.putString("score", "0");
+                                                        editor.putString("userid", objectid);
+                                                        editor.commit();
+                                                        Toast toast = Toast.makeText(getApplicationContext(), objectid+" Create User success：" + username, Toast.LENGTH_SHORT);
                                                         toast.show();
                                                     } else {
                                                         Log.i("bmob", "fail：" + e.getMessage() + "," + e.getErrorCode());
@@ -91,12 +103,7 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             });
 
-                                            SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
-                                            SharedPreferences.Editor editor = sp.edit();
-                                            editor.putString("username", username);
-                                            editor.putString("score", "0");
-                                            editor.putString("userid", userid);
-                                            editor.commit();
+
                                             tv = (TextView) findViewById(R.id.textView2);
                                             tv.setText(username);
                                             tv.setGravity(Gravity.CENTER);
