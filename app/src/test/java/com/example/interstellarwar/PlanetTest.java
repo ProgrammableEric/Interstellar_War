@@ -30,7 +30,7 @@ public class PlanetTest {
     public void TestPositioning(){
 
         int bmid_mercury = bitmapIds[4];
-        Bitmap bitmap_mercury = BitmapFactory.decodeResource(, bmid_mercury);
+        Bitmap bitmap_mercury = BitmapFactory.decodeResource(getResource(), bmid_mercury);
         Planet mercury1 = new Planet(bitmap_mercury);
         assertEquals("Planet initial x position is not 0", mercury1.getX() == 0);
         assertEquals("Planet initial x position is not 0", mercury1.getY() == 0);

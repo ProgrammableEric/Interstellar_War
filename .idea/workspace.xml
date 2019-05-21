@@ -165,7 +165,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/test/java/com/example/interstellarwar/PlanetTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
+            <state relative-caret-position="337">
               <caret line="31" column="40" lean-forward="true" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -627,11 +627,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.18903089" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.28675282" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Build Variants" order="4" side_tool="true" />
@@ -641,10 +640,10 @@
       <window_info anchor="bottom" id="Version Control" order="0" sideWeight="0.7167199" weight="0.5772277" />
       <window_info anchor="bottom" id="Logcat" order="1" sideWeight="0.49361023" weight="0.3059406" />
       <window_info anchor="bottom" id="TODO" order="2" sideWeight="0.49361023" weight="0.32871288" />
-      <window_info anchor="bottom" id="Terminal" order="3" sideWeight="0.62247074" weight="0.16633664" />
-      <window_info anchor="bottom" id="Event Log" order="4" sideWeight="0.23162939" side_tool="true" visible="true" weight="0.09405941" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="3" sideWeight="0.6211632" visible="true" weight="0.45068493" />
+      <window_info anchor="bottom" id="Event Log" order="4" sideWeight="0.37883684" side_tool="true" visible="true" weight="0.45068493" />
       <window_info anchor="bottom" id="Android Profiler" order="5" sideWeight="0.49893504" weight="0.32970297" />
-      <window_info anchor="bottom" id="Run" order="6" sideWeight="0.7683706" visible="true" weight="0.09405941" />
+      <window_info anchor="bottom" id="Run" order="6" sideWeight="0.76817447" weight="0.54246575" />
       <window_info anchor="bottom" id="Debug" order="7" sideWeight="0.49893504" weight="0.32970297" />
       <window_info anchor="bottom" id="Build" order="8" sideWeight="0.71459" weight="0.38019803" />
       <window_info anchor="bottom" id="Find" order="9" />
@@ -863,7 +862,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/test/java/com/example/interstellarwar/PlanetTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
+        <state relative-caret-position="337">
           <caret line="31" column="40" lean-forward="true" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
