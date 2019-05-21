@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         Bmob.initialize(this, "726dd8d3f9685b2c34d8e7170c9b2d3e");
 
         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+        //
 
         String username = sp.getString("username", "");
 
