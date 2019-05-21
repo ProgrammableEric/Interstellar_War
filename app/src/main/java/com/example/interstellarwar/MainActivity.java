@@ -33,10 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
 
-//        SharedPreferences.Editor editor = sp.edit();
-//        editor.putString("username", "");
-//        editor.commit();
-
         String username = sp.getString("username", "");
 
         if (username.isEmpty()) {
