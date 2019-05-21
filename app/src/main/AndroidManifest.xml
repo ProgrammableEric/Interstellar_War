@@ -17,12 +17,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ScoresActivity"></activity>
 
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"
-            android:authorities="com.example.interstellarwar.BmobContentProvider"></provider>
+            android:authorities="com.example.interstellarwar.BmobContentProvider" />
 
-        <activity android:name=".StartActivity"></activity>
+        <activity android:name=".StartActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

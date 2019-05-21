@@ -14,12 +14,6 @@ import java.util.List;
 
 public class SpaceShip extends Planet {
     private boolean collide = false; // if spaceship is collided
-    private int nuclearNo = 0; // the available number of nuclear
-
-    // double laser
-    private boolean single = true; // label if it is a single laser
-    private int doubleTime = 0; // the times of using double laser
-    private int maxDoubleTime = 140; // the max number of using double laser
 
     // flash
     private long beginFlashFrame = 0; //the frame that starting flash
@@ -71,35 +65,11 @@ public class SpaceShip extends Planet {
         }
 
         float x = getX() + getWidth() / 2;
-        float y = getY() - 5;
-//        if(single){
-            // single shot mode trigger yellow bullet
+        float y = getY() - 500;
             Bitmap laserBitmap = gameView.getLaserBitmap();
-            Laser yellowBullet = new Laser(laserBitmap);
-            yellowBullet.moveTo(x, y);
-            gameView.addPlanet(yellowBullet);
-//        }
-//        else{
-//            // double shop mode trigger blue bullet
-//            float offset = getWidth() / 4;
-//            float leftX = x - offset;
-//            float rightX = x + offset;
-//            Bitmap blueBulletBitmap = gameView.getBlueBulletBitmap();
-//
-//            Laser leftBlueBullet = new Laser(blueBulletBitmap);
-//            leftBlueBullet.moveTo(leftX, y);
-//            gameView.addPlanet(leftBlueBullet);
-//
-//            Laser rightBlueBullet = new Laser(blueBulletBitmap);
-//            rightBlueBullet.moveTo(rightX, y);
-//            gameView.addPlanet(rightBlueBullet);
-//
-//            doubleTime++;
-//            if(doubleTime >= maxDoubleTime){
-//                single = true;
-//                doubleTime = 0;
-//            }
-//        }
+            Laser laser = new Laser(laserBitmap);
+            laser.moveTo(x, y);
+            gameView.addPlanet(laser);
     }
 
     protected void finishDeploy(Canvas canvas, Paint paint, GameView gameView){
@@ -109,8 +79,8 @@ public class SpaceShip extends Planet {
 
         // check if spaceship will be shot before hit
         if(!collide){
-            List<NewStar> stars = gameView.getStars();
-            for(NewStar star : stars){
+            List<Star> stars = gameView.getStars();
+            for(Star star : stars){
                 Point p = getCollidedBitmapPos(star);
                 if(p != null){
                     // p is hit point with star, if p is not null then spaceship is hitted by star
@@ -120,7 +90,7 @@ public class SpaceShip extends Planet {
             }
         }
 
-        // if beginFlashFrame is 0, means not in the flash mode
+        //if beginFlashFrame is 0, means not in the flash mode
         //if beginFlashFrame larger than 0, means start flashing from beginFlashFrame
         if(beginFlashFrame > 0){
             long frame = getTimes();
@@ -137,30 +107,6 @@ public class SpaceShip extends Planet {
                 }
             }
         }
-
-        // if not hit check if get the credit
-//        if(!collide){
-//            // check if get nuclear credit
-//            List<NuclearCredit> nuclearCredit = gameView.getAliveBombAwards();
-//            for(NuclearCredit nc : nuclearCredit){
-//                Point p = getCollidedBitmapPos(nc);
-//                if(p != null){
-//                    nuclearNo++;
-//                    nc.destroy();
-//                }
-//            }
-//
-//            // check if get laser credit
-//            List<LaserCredit> laserCredit = gameView.getAliveBulletAwards();
-//            for(LaserCredit lc : laserCredit){
-//                Point p = getCollidedBitmapPos(lc);
-//                if(p != null){
-//                    lc.destroy();
-//                    single = false;
-//                    doubleTime = 0;
-//                }
-//            }
-//        }
     }
 
     // Spaceship is collided
@@ -168,40 +114,7 @@ public class SpaceShip extends Planet {
         if(!collide){
             collide = true;
             setVisibility(false);
-//            float centerX = getX() + getWidth() / 2;
-//            float centerY = getY() + getHeight() / 2;
-//            Bombing bombing = new Bombing(gameView.getExplosionBitmap());
-//            bombing.centerTo(centerX, centerY);
-//            gameView.addPlanet(bombing);
             beginFlashFrame = getTimes();
         }
-    }
-
-    // Get the times of nuclear
-    public int getNuclearNo(){
-        return nuclearNo;
-    }
-
-    // spaceship uses nuclear
-    public void nuclear(GameView gameView){
-        if(collide || isDestroyed()){
-            return;
-        }
-
-        if(nuclearNo > 0){
-            List<NewStar> enemyPlanes = gameView.getStars();
-            for(NewStar enemyPlane : enemyPlanes){
-                enemyPlane.bomb(gameView);
-            }
-            nuclearNo--;
-        }
-    }
-
-    public boolean isCollide(){
-        return collide;
-    }
-
-    public void setNotCollide(){
-        collide = false;
     }
 }

@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
  * the largest star with large quality and high resistance
  */
 
-public class Jupiter extends NewStar {
+public class Jupiter extends Star {
 
     public Jupiter(Bitmap bm){
         super(bm);
