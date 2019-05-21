@@ -1,19 +1,16 @@
 package com.example.interstellarwar;
 
-import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.view.View;
-import android.support.test.InstrumentationRegistry;
+//import static android.support.test.InstrumentationRegistry.getContext;
+import android.content.Context;
 
 import org.junit.Test;
 
-import static android.support.test.InstrumentationRegistry.getContext;
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertEquals;
 
-public class PlanetTest  {
-
-    Context context = getContext();
+public class PlanetTest {
 
     private int[] bitmapIds = {
             R.drawable.spaceship,
@@ -31,10 +28,13 @@ public class PlanetTest  {
 
     @Test
     public void TestPositioning(){
+
         int bmid_mercury = bitmapIds[4];
-        Bitmap bitmap_mercury = BitmapFactory.decodeResource(getResources(), bmid_mercury);
+        Bitmap bitmap_mercury = BitmapFactory.decodeResource(, bmid_mercury);
         Planet mercury1 = new Planet(bitmap_mercury);
-        assertTrue("Planet initial x position is not 0", mercury1.getX() == 0);
-        assertTrue("Planet initial x position is not 0", mercury1.getY() == 0);
+        assertEquals("Planet initial x position is not 0", mercury1.getX() == 0);
+        assertEquals("Planet initial x position is not 0", mercury1.getY() == 0);
     }
+
+
 }
