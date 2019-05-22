@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Restart"
+        android:onClick="Restart"
         tools:layout_editor_absoluteX="152dp"
         tools:layout_editor_absoluteY="520dp" />
 </android.support.constraint.ConstraintLayout>
