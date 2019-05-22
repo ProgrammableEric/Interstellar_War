@@ -5,14 +5,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 public class ScoresActivity extends AppCompatActivity {
     private Integer score = 0;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +35,7 @@ public class ScoresActivity extends AppCompatActivity {
 
         String userscore = sp.getString("score", "");
         String userid = sp.getString("userid", "");
-        Toast toast = Toast.makeText(getApplicationContext(), "userid is " + userid, Toast.LENGTH_SHORT);
-        toast.show();
+
         if (!userscore.isEmpty()) {
             Integer uscore = Integer.parseInt(userscore);
 
@@ -50,6 +59,34 @@ public class ScoresActivity extends AppCompatActivity {
                 });
             }
         }
+
+
+        final Context context = getApplicationContext();
+        BmobQuery<GameScore> query = new BmobQuery<GameScore>();
+        query.order("-score");
+        query.setLimit(10);
+        query.findObjects(new FindListener<GameScore>() {
+            @Override
+            public void done(List<GameScore> list, BmobException e) {
+                if (e == null) {
+
+                    if (!list.isEmpty()) { //list the 10 highest scores  in list
+                        ArrayList<String> scores = new ArrayList<>();
+                        for (int i = 0; i < list.size(); i++) {
+                            int rank = i+1;
+                            scores.add("No "+rank+" :  "+list.get(i).getPlayerName()+ "    Scores :  "+ list.get(i).getScore());
+                        }
+                        listView = (ListView) findViewById(R.id.listview);
+                        ListAdapter adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, scores);
+                        // use a adapter to list the scores in arraylist
+                        listView.setAdapter(adapter);
+                    }
+
+                } else {
+                    Log.i("bmob", "fail：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+        });
 
     }
 

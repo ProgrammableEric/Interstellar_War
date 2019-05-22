@@ -33,12 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
 
-//        SharedPreferences.Editor editor = sp.edit();
-//        editor.putString("username", "");
-//        editor.putString("score", "0");
-//        editor.putString("userid", "");
-//        editor.commit();
-
         String username = sp.getString("username", "");
 
         if (username.isEmpty()) {
@@ -109,9 +103,7 @@ public class MainActivity extends AppCompatActivity {
                                             tv.setGravity(Gravity.CENTER);
 
                                         } else {
-                                            Toast.makeText(MainActivity.this,
-                                                    "This username already exists",
-                                                    Toast.LENGTH_LONG).show();
+                                            Toast.makeText(MainActivity.this, "This username already exists", Toast.LENGTH_LONG).show();
                                             showInputDialog();
                                         }
                                     } else {
@@ -133,6 +125,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void startGame(){
         Intent intent = new Intent(this, StartActivity.class);
+        startActivity(intent);
+    }
+
+    public void clean(View v) {
+        SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("username", "");
+        editor.putString("score", "0");
+        editor.putString("userid", "");
+        editor.commit();
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }
