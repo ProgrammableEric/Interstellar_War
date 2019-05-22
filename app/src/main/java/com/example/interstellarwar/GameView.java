@@ -8,6 +8,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -179,7 +180,7 @@ public class GameView extends View {
                 spaceShip.beforeDeploy(canvas, paint, this);
             }
             paint.setStyle(Paint.Style.FILL);
-            paint.setColor(0xFFD7DDDE);
+            paint.setColor(Color.parseColor("#FFFFF0"));
             Rect rect1 = new Rect(300, 600, 750, 800);
             canvas.drawRect(rect1, paint);
             textPaint.setTextSize(60);
