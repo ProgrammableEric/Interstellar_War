@@ -29,15 +29,6 @@ public class GameView extends View {
     // initial the planets and to add planets
     private List<Planet> planets = new ArrayList<Planet>();
     private List<Planet> toAddPlanets = new ArrayList<Planet>();
-    //0:spaceship
-    //1:bombing
-    //2:laser
-    //4:mercury
-    //5:mars
-    //6:jupiter
-    //7:nuclearCredit
-    //9:pause
-    //11:nuclear
     private List<Bitmap> bitmaps = new ArrayList<Bitmap>();
     private Paint paint = new Paint();
     private TextPaint textPaint = new TextPaint();
@@ -46,9 +37,6 @@ public class GameView extends View {
     private long globalCount = 0;
     private Integer score = 0;
     private Integer highestscore = 0;
-    private float fontSize = 12;
-    private float fontSize2 = 20;
-    private float borderSize = 2;
     private Rect continueRect = new Rect();
     //duration between up and down action
     private static final int singleDuration = 200;
@@ -147,25 +135,7 @@ public class GameView extends View {
                 if(continueRect.contains((int)tX, (int)tY)){
                     status = 1;
                     postInvalidate();
-                }
-            }else if(status == 3){
-                if(continueRect.contains((int)tX, (int)tY)){
-                    status = 4;
-                    globalCount = 0;
-                    score = 0;
-                    if(spaceShip != null){
-                        spaceShip.destroy();
-                    }
-                    spaceShip = null;
-                    for(Planet p : planets){
-                        p.destroy();
-                    }
-                    planets.clear();
-                    spaceShip = new SpaceShip(bitmaps.get(0));
-                    status = 1;
-                    postInvalidate();
-                }
-            }
+                }}
         }
 
         super.onDraw(canvas);
@@ -201,6 +171,18 @@ public class GameView extends View {
                     "The game is over ！").setNegativeButton("Restart", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    globalCount = 0;
+                    score = 0;
+                    if(spaceShip != null){
+                        spaceShip.destroy();
+                    }
+                    spaceShip = null;
+                    for(Planet p : planets){
+                        p.destroy();
+                    }
+                    planets.clear();
+                    spaceShip = new SpaceShip(bitmaps.get(0));
+                    status = 1;
                     postInvalidate();
                 }
             }).setPositiveButton("Quit", new DialogInterface.OnClickListener() {
@@ -211,21 +193,6 @@ public class GameView extends View {
                     getContext().startActivity(intent);
                 }
             }).show();
-
-//            paint.setStyle(Paint.Style.FILL);
-//            paint.setColor(0xFFD7DDDE);
-//            Rect rect1 = new Rect(0, 0, 1000, 300);
-//            canvas.drawRect(rect1, paint);
-//            textPaint.setTextSize(60);
-//            textPaint.setTextAlign(Paint.Align.CENTER);
-//            canvas.drawText("scores: "+score, 500, 150, textPaint);
-//            Rect rect2 = new Rect(250,300,750,600);
-//            canvas.drawRect(rect2, paint);
-//            canvas.drawText("continue", 500, 450, textPaint);
-//            continueRect = new Rect(rect2);
-//            if(lastSingleClickTime > 0){
-//                postInvalidate();
-//            }
         }
     }
 
