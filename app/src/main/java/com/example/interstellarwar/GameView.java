@@ -166,11 +166,14 @@ public class GameView extends View {
         }else if(status == 3){
             if (highestscore < score) {
                 highestscore = score;
+                // use a highest score to save the highest score in recent games if the user to choose the quit button.
             }
             new AlertDialog.Builder(getContext()).setTitle("Scores: "+ score).setMessage(
+                    // use a dialog to show the scores and choices.
                     "The game is over ！").setNegativeButton("Restart", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    // restart the game.
                     globalCount = 0;
                     score = 0;
                     if(spaceShip != null){
@@ -188,6 +191,7 @@ public class GameView extends View {
             }).setPositiveButton("Quit", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    // turn to scores activity, and send the highest score to it.
                     Intent intent = new Intent(getContext(), ScoresActivity.class);
                     intent.putExtra("Score", highestscore);
                     getContext().startActivity(intent);

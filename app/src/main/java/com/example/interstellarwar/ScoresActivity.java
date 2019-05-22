@@ -40,11 +40,13 @@ public class ScoresActivity extends AppCompatActivity {
             Integer uscore = Integer.parseInt(userscore);
 
             if (uscore < score) {
+                // if the local score is the highest score, store in the local file and update it in database.
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString("score", Integer.toString(score));
                 editor.commit();
                 GameScore gs = new GameScore();
                 gs.setScore(score);
+                // update the score
                 gs.update(userid, new UpdateListener() {
                     @Override
                     public void done(BmobException e) {
@@ -65,6 +67,7 @@ public class ScoresActivity extends AppCompatActivity {
         BmobQuery<GameScore> query = new BmobQuery<GameScore>();
         query.order("-score");
         query.setLimit(10);
+        // query the 10 highest scores in database and show them in the listview.
         query.findObjects(new FindListener<GameScore>() {
             @Override
             public void done(List<GameScore> list, BmobException e) {

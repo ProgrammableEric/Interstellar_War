@@ -30,18 +30,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Bmob.initialize(this, "726dd8d3f9685b2c34d8e7170c9b2d3e");
+        //initial bmob
 
         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
 
         String username = sp.getString("username", "");
+        // check the local file if there already is a username
 
         if (username.isEmpty()) {
+            // if not, show a input dialog
             Toast toast = Toast.makeText(getApplicationContext(), "no user name", Toast.LENGTH_SHORT);
             toast.show();
             showInputDialog();
         } else {
             Toast toast = Toast.makeText(getApplicationContext(), "Hi!, "+ username+" login succeed", Toast.LENGTH_SHORT);
             toast.show();
+            // if yes, show the username in the center of layout
             tv = (TextView) findViewById(R.id.textView2);
             tv.setText(username);
             tv.setGravity(Gravity.CENTER);
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showInputDialog() {
+        // show a new input dialog to regist a new user
         final EditText editText = new EditText(MainActivity.this);
         AlertDialog.Builder inputDialog = new AlertDialog.Builder(MainActivity.this);
         inputDialog.setCancelable(false);
@@ -59,12 +64,12 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         final String username = editText.getText().toString();
 
-                        if (username.isEmpty()) {
+                        if (username.isEmpty()) { // check the input if it's empty
                             Toast toast = Toast.makeText(getApplicationContext(), "Can not enter empty name!", Toast.LENGTH_SHORT);
                             toast.show();
                             showInputDialog();
                         } else {
-
+                            // used a query to find the username in database, if the name exited, repeat registing
                             BmobQuery<GameScore> query = new BmobQuery<GameScore>();
                             query.addWhereEqualTo("playerName", username);
                             query.setLimit(1);
@@ -73,21 +78,23 @@ public class MainActivity extends AppCompatActivity {
                                 public void done(List<GameScore> list, BmobException e) {
                                     if (e == null) {
                                         if (list.isEmpty()) {
-
+                                            // if the username is not existed, upload a new user
                                             GameScore gs = new GameScore();
                                             gs.setPlayerName(username);
                                             gs.setScore(0);
-                                            //String userid = gs.getObjectId();
+                                            // set the score as 0
                                             gs.save(new SaveListener<String>() {
                                                 @Override
                                                 public void done(String objectid, BmobException e) {
                                                     if (e == null) {
 
                                                         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+                                                        //at the same time, save the user information in local file.
                                                         SharedPreferences.Editor editor = sp.edit();
                                                         editor.putString("username", username);
                                                         editor.putString("score", "0");
                                                         editor.putString("userid", objectid);
+                                                        // save the objectid to update info after
                                                         editor.commit();
                                                         Toast toast = Toast.makeText(getApplicationContext(), objectid+" Create User success：" + username, Toast.LENGTH_SHORT);
                                                         toast.show();
@@ -129,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clean(View v) {
+        //clean the user info in local file, and restart the main activity.
         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("username", "");
