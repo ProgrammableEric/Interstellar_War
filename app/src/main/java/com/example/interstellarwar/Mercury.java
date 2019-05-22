@@ -2,6 +2,10 @@ package com.example.interstellarwar;
 
 import android.graphics.Bitmap;
 
+/**
+ * the small star with small quality and low resistance
+ */
+
 public class Mercury extends Star {
     public Mercury(Bitmap bm){
         super(bm);

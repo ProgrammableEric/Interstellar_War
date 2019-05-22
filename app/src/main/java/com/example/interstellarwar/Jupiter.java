@@ -3,7 +3,7 @@ package com.example.interstellarwar;
 import android.graphics.Bitmap;
 
 /**
- * the largest star with large quality and high resistance
+ * the large star with large quality and high resistance
  */
 
 public class Jupiter extends Star {
