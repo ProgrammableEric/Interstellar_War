@@ -7,6 +7,10 @@ import android.graphics.Point;
 
 import java.util.List;
 
+/**
+ * rivalry stars, including two types, Jupiter and Mercury
+ */
+
 public class Star extends Planet {
     private int resistance;//how the planet is resistant
     private int grade;// how many grades can get after destroying one planet
