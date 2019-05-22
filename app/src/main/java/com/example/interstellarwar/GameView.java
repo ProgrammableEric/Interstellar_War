@@ -180,14 +180,14 @@ public class GameView extends View {
             }
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(0xFFD7DDDE);
-            Rect rect1 = new Rect(0, 0, 1000, 300);
+            Rect rect1 = new Rect(300, 600, 750, 800);
             canvas.drawRect(rect1, paint);
             textPaint.setTextSize(60);
             textPaint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText("scores: "+score, 500, 150, textPaint);
-            Rect rect2 = new Rect(250,300,750,600);
+            canvas.drawText("scores: "+score, 530, 730, textPaint);
+            Rect rect2 = new Rect(300,800,750,900);
             canvas.drawRect(rect2, paint);
-            canvas.drawText("continue", 500, 450, textPaint);
+            canvas.drawText("continue", 530, 830, textPaint);
             continueRect = new Rect(rect2);
             if(lastSingleClickTime > 0){
                 postInvalidate();
