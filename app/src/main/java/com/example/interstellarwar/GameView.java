@@ -46,9 +46,6 @@ public class GameView extends View {
     private long globalCount = 0;
     private Integer score = 0;
     private Integer highestscore = 0;
-    private float fontSize = 12;
-    private float fontSize2 = 20;
-    private float borderSize = 2;
     private Rect continueRect = new Rect();
     //duration between up and down action
     private static final int singleDuration = 200;
@@ -78,6 +75,7 @@ public class GameView extends View {
         a.recycle();
     }
 
+    // start the game
     public void startSetting(int[] bmIds){
         remove();
         for(int Id : bmIds){
@@ -89,6 +87,7 @@ public class GameView extends View {
         postInvalidate();
     }
 
+    // get the pixel of game view
     public float getDensity(){
         return getResources().getDisplayMetrics().density;
     }
@@ -170,7 +169,7 @@ public class GameView extends View {
 
         super.onDraw(canvas);
 
-        if(status == 1){
+        if(status == 1){ // draw the main interface of game
             drawGaming(canvas);
         }else if(status == 2){
             for(Planet p : planets){
@@ -193,7 +192,7 @@ public class GameView extends View {
             if(lastSingleClickTime > 0){
                 postInvalidate();
             }
-        }else if(status == 3){
+        }else if(status == 3){ // draw the score and continue interface
             if (highestscore < score) {
                 highestscore = score;
             }
@@ -241,7 +240,7 @@ public class GameView extends View {
         if(globalCount == 0){
             spaceShip.centerTo(canvas.getWidth()*0.2f, canvas.getHeight()*0.8f);
         }
-        // add toadd planets
+        // add planets
         if(toAddPlanets.size() > 0){
             planets.addAll(toAddPlanets);
             toAddPlanets.clear();
@@ -304,7 +303,7 @@ public class GameView extends View {
         int action = event.getAction();
         tX = event.getX();
         tY = event.getY();
-        //1-move;  2-singleclick; 3-doubleclick
+        //1-move;  2-singleClick; 3-doubleClick
         int tType = -1;
         switch (action){
             case MotionEvent.ACTION_MOVE: long finishTime = System.currentTimeMillis() - tDownTime;
@@ -349,6 +348,7 @@ public class GameView extends View {
     }
 
 
+    // remove the objects destroyed or outside validate range
     public void remove(){
         status = 4;
         globalCount = 0;
@@ -382,6 +382,5 @@ public class GameView extends View {
     public Bitmap getLaserBitmap(){
         return bitmaps.get(2);
     }
-
-
+    
 }
