@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 
 /**
  * the large star with large quality and high resistance
+ *
+ * author: Wenjuan Liao, Xiaoquan Hu
  */
 
 public class Jupiter extends Star {

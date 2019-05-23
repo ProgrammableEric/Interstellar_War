@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  * user control, can exchange position
+ *
+ * author: Wenjuan Liao, Xiaoquan Hu
  */
 
 public class SpaceShip extends Planet {

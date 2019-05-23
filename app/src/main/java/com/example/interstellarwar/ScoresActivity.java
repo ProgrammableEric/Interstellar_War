@@ -20,6 +20,10 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
+/**
+ * Author: Yuyuan Liang
+ */
+
 public class ScoresActivity extends AppCompatActivity {
     private Integer score = 0;
     private ListView listView;

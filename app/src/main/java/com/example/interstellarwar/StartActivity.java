@@ -3,6 +3,12 @@ package com.example.interstellarwar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+/**
+ * the main interface for the game
+ *
+ * author: Xiaoquan Hu, Wenjuan Liao
+ */
+
 public class StartActivity extends AppCompatActivity {
 
     private GameView gameView;

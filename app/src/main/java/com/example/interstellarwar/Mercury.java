@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 
 /**
  * the small star with small quality and low resistance
+ *
+ * author: Wenjuan Liao, Xiaoquan Hu
  */
 
 public class Mercury extends Star {

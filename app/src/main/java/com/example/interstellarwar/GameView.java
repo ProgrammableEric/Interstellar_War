@@ -22,6 +22,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * the main interface for the game
+ *
+ * author: Xiaoquan Hu, Wenjuan Liao
+ */
+
 public class GameView extends View {
 
     //set class field
@@ -356,5 +362,5 @@ public class GameView extends View {
     public Bitmap getLaserBitmap(){
         return bitmaps.get(2);
     }
-    
+
 }

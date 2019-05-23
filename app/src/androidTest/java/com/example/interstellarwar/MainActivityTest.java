@@ -16,10 +16,11 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.*;
 
+/**
+ * Author: Chunze Fu
+ */
+
 public class MainActivityTest {
-    /*
-    * Author: Chunze Fu
-    * */
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class);

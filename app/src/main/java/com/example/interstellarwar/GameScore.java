@@ -2,6 +2,10 @@ package com.example.interstellarwar;
 
 import cn.bmob.v3.BmobObject;
 
+/**
+ * Author: Yuyuan Liang
+ */
+
 public class GameScore extends BmobObject {
     private String playerName;
     private Integer score;

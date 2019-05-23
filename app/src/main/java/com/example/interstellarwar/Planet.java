@@ -9,7 +9,10 @@ import android.graphics.RectF;
 
 /**
  * the basic class for creating rival planets
+ *
+ * author: Wenjuan Liao, Xiaoquan Hu
  */
+
 public class Planet {
     private boolean visible = true; //if visible to user
     private float x = 0; //x-coordinate

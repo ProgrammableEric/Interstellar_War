@@ -9,6 +9,8 @@ import java.util.List;
 
 /**
  * rivalry stars, including two types, Jupiter and Mercury
+ *
+ * author: Wenjuan Liao, Xiaoquan Hu
  */
 
 public class Star extends Planet {

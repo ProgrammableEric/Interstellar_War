@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 
 /**
  * weapon for spaceship
+ *
+ * author: Wenjuan Liao, Xiaoquan Hu
  */
 
 public class Laser extends Star {

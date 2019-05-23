@@ -16,11 +16,11 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertNotNull;
 
-public class StartButtonTest {
+/**
+ * Author: Chunze Fu
+ */
 
-    /*
-     * Author: Chunze Fu
-     * */
+public class StartButtonTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class);
